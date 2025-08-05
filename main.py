@@ -121,10 +121,7 @@ def main():
         if st.button("💊 Q.Dose", key="dose", help="Pharmaceutical Analytics"):
             st.switch_page("pages/dose.py")
         
-        # AI Insights
-        if st.button("🤖 AI Insights", key="ai_insights", help="Cortex-Powered Analytics"):
-            st.switch_page("pages/ai_insights.py")
-        
+
         st.markdown("---")
         
         # Performance Monitor
@@ -138,7 +135,7 @@ def main():
             st.warning(f"⚠️ Load time: {load_time:.1f}s")
     
     # Main Content Area
-    col1, col2, col3 = st.columns(3)
+    col1, col2 = st.columns(2)
     
     with col1:
         st.markdown("""
@@ -176,23 +173,7 @@ def main():
         if st.button("Launch Q.Dose →", key="launch_dose"):
             st.switch_page("pages/dose.py")
     
-    with col3:
-        st.markdown("""
-        <div class="nav-section">
-            <h3>🤖 AI Insights</h3>
-            <p><strong>Cortex-Powered Analytics</strong></p>
-            <ul>
-                <li>Natural language querying</li>
-                <li>Automated insight generation</li>
-                <li>Predictive cost analytics</li>
-                <li>Fraud detection patterns</li>
-                <li>Premium AI capabilities</li>
-            </ul>
-        </div>
-        """, unsafe_allow_html=True)
-        
-        if st.button("Launch AI Insights →", key="launch_ai"):
-            st.switch_page("pages/ai_insights.py")
+
     
     # Platform Overview Metrics
     st.markdown("## 📈 Platform Overview")
@@ -210,7 +191,7 @@ def main():
         create_metric_card("Active Provinces", "9/9", "Complete SA coverage")
     
     with col4:
-        create_metric_card("AI Queries", "Ready", "Cortex integration enabled")
+        create_metric_card("Intelligence", "Active", "Snowflake Intelligence enabled")
     
     # Quick Stats Dashboard
     if st.session_state.connection_status == 'Connected ✅':

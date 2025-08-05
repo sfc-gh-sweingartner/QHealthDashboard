@@ -18,7 +18,7 @@ This modern healthcare analytics platform replaces slow legacy Tableau dashboard
 ### ✅ Phase 2: Core Dashboards (COMPLETED)
 - **🩺 Q.CheckUp Lite Dashboard**: Medical device & claims analytics
 - **💊 Q.Dose Dashboard**: Pharmaceutical prescription analytics  
-- **🤖 AI Insights Dashboard**: Cortex-powered natural language querying
+- **❄️ Snowflake Intelligence Integration**: AI-powered analytics
 - **Performance target achieved**: <5 second dashboard load times
 - **AI capabilities**: Natural language queries, automated insights, fraud detection
 
@@ -90,12 +90,6 @@ The application will be available at `http://localhost:8501`
 - **Financial Breakdown**: 13-source payment analysis
 - **Provider Patterns**: Prescribing behavior and anomaly detection
 
-### 🤖 AI Insights - Cortex Integration
-- **Natural Language Queries**: "Show me expensive MS drugs by province"
-- **Automated Insights**: AI-generated pattern recognition
-- **Predictive Analytics**: Cost forecasting and risk scoring
-- **Fraud Detection**: ML-powered anomaly identification
-- **Premium Features**: Advanced AI capabilities for revenue growth
 
 ## 📈 Performance Achievements
 
@@ -103,7 +97,7 @@ The application will be available at `http://localhost:8501`
 |--------|------------------|-------------------|-------------|
 | **Load Time** | 40-50 seconds | <5 seconds | **90%+ faster** |
 | **User Experience** | Desktop-only, clunky | Modern web, responsive | **Transformed** |
-| **AI Capabilities** | None | Natural language querying | **New revenue stream** |
+| **AI Capabilities** | None | Snowflake Intelligence | **New revenue stream** |
 | **Scalability** | Limited, on-premises | Cloud-native, auto-scaling | **5-10x growth ready** |
 | **Support Overhead** | High-touch required | Self-service enabled | **Reduced operational cost** |
 
