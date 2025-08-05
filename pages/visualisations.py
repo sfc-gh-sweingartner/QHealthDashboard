@@ -188,27 +188,9 @@ def create_plotly_visualizations(data):
     
     st.markdown('<h2 class="category-header">🚀 Plotly Interactive Visualizations</h2>', unsafe_allow_html=True)
     
-    # 1. Patient Demographics Scatter Plot (Simplified for Snowflake)
+    # 1. Hospital Operations Multi-Line Chart (Simplified for Snowflake)
     with st.container():
-        st.markdown('<div class="viz-title">1. Patient Demographics Analysis</div>', unsafe_allow_html=True)
-        st.markdown('<div class="viz-description">Explore correlations between age and cholesterol with gender segmentation</div>', unsafe_allow_html=True)
-        
-        fig1 = px.scatter(
-            data['patients'],
-            x='age',
-            y='cholesterol',
-            color='gender',
-            hover_data=['province', 'satisfaction_score', 'bmi'],
-            title='Patient Demographics: Age vs Cholesterol by Gender',
-            color_discrete_map={'Male': '#1f77b4', 'Female': '#ff7f0e'},
-            template='plotly_white'
-        )
-        fig1.update_layout(height=500, font=dict(size=12))
-        st.plotly_chart(fig1, use_container_width=True, theme="streamlit")
-    
-    # 2. Hospital Operations Multi-Line Chart (Simplified for Snowflake)
-    with st.container():
-        st.markdown('<div class="viz-title">2. Hospital Operations Dashboard</div>', unsafe_allow_html=True)
+        st.markdown('<div class="viz-title">1. Hospital Operations Dashboard</div>', unsafe_allow_html=True)
         st.markdown('<div class="viz-description">Multi-line view of admissions, discharges, and bed occupancy over time</div>', unsafe_allow_html=True)
         
         # Prepare data - sample every 30 days for better performance
@@ -219,7 +201,7 @@ def create_plotly_visualizations(data):
             var_name='metric', value_name='value'
         )
         
-        fig2 = px.line(
+        fig1 = px.line(
             ts_melted,
             x='date',
             y='value',
@@ -232,15 +214,15 @@ def create_plotly_visualizations(data):
                 'bed_occupancy': '#2ca02c'
             }
         )
-        fig2.update_layout(height=500, xaxis_tickangle=45)
-        st.plotly_chart(fig2, use_container_width=True, theme="streamlit")
+        fig1.update_layout(height=500, xaxis_tickangle=45)
+        st.plotly_chart(fig1, use_container_width=True, theme="streamlit")
     
-    # 3. 3D Scatter Plot for Patient Clustering
+    # 2. 3D Scatter Plot for Patient Clustering
     with st.container():
-        st.markdown('<div class="viz-title">3. Advanced 3D Patient Clustering</div>', unsafe_allow_html=True)
+        st.markdown('<div class="viz-title">2. Advanced 3D Patient Clustering</div>', unsafe_allow_html=True)
         st.markdown('<div class="viz-description">Three-dimensional analysis of patient health metrics</div>', unsafe_allow_html=True)
         
-        fig3 = px.scatter_3d(
+        fig2 = px.scatter_3d(
             data['patients'].sample(500),  # Sample for performance
             x='age',
             y='bmi',
@@ -251,15 +233,15 @@ def create_plotly_visualizations(data):
             title='3D Patient Health Profile Analysis',
             template='plotly_dark'
         )
-        fig3.update_layout(height=600, scene=dict(camera=dict(eye=dict(x=1.5, y=1.5, z=1.5))))
-        st.plotly_chart(fig3, use_container_width=True, theme="streamlit", config={'renderer': 'svg'})
+        fig2.update_layout(height=600, scene=dict(camera=dict(eye=dict(x=1.5, y=1.5, z=1.5))))
+        st.plotly_chart(fig2, use_container_width=True, theme="streamlit", config={'renderer': 'svg'})
     
-    # 4. Clinical Biomarker Correlation Heatmap
+    # 3. Clinical Biomarker Correlation Heatmap
     with st.container():
-        st.markdown('<div class="viz-title">4. Clinical Biomarker Correlation Matrix</div>', unsafe_allow_html=True)
+        st.markdown('<div class="viz-title">3. Clinical Biomarker Correlation Matrix</div>', unsafe_allow_html=True)
         st.markdown('<div class="viz-description">Interactive heatmap showing relationships between lab results</div>', unsafe_allow_html=True)
         
-        fig4 = px.imshow(
+        fig3 = px.imshow(
             data['correlation_matrix'],
             x=data['biomarkers'],
             y=data['biomarkers'],
@@ -268,15 +250,15 @@ def create_plotly_visualizations(data):
             title='Biomarker Correlation Analysis',
             aspect='auto'
         )
-        fig4.update_layout(height=500)
-        st.plotly_chart(fig4, use_container_width=True, theme="streamlit")
+        fig3.update_layout(height=500)
+        st.plotly_chart(fig3, use_container_width=True, theme="streamlit")
     
-    # 5. Sunburst Chart for Treatment Pathways
+    # 4. Sunburst Chart for Treatment Pathways
     with st.container():
-        st.markdown('<div class="viz-title">5. Patient Treatment Journey Visualization</div>', unsafe_allow_html=True)
+        st.markdown('<div class="viz-title">4. Patient Treatment Journey Visualization</div>', unsafe_allow_html=True)
         st.markdown('<div class="viz-description">Hierarchical view of patient pathways through healthcare system</div>', unsafe_allow_html=True)
         
-        fig5 = px.sunburst(
+        fig4 = px.sunburst(
             data['pathways'],
             path=['admission_type', 'diagnosis_group', 'treatment_phase'],
             values='patient_count',
@@ -284,15 +266,15 @@ def create_plotly_visualizations(data):
             color='patient_count',
             color_continuous_scale='Viridis'
         )
-        fig5.update_layout(height=600)
-        st.plotly_chart(fig5, use_container_width=True, theme="streamlit")
+        fig4.update_layout(height=600)
+        st.plotly_chart(fig4, use_container_width=True, theme="streamlit")
     
-    # 6. Bubble Chart for Clinic Performance
+    # 5. Bubble Chart for Clinic Performance
     with st.container():
-        st.markdown('<div class="viz-title">6. Multi-Dimensional Clinic Performance Analysis</div>', unsafe_allow_html=True)
+        st.markdown('<div class="viz-title">5. Multi-Dimensional Clinic Performance Analysis</div>', unsafe_allow_html=True)
         st.markdown('<div class="viz-description">Comprehensive view of clinic efficiency metrics</div>', unsafe_allow_html=True)
         
-        fig6 = px.scatter(
+        fig5 = px.scatter(
             data['clinics'],
             x='patient_volume',
             y='avg_wait_time',
@@ -303,15 +285,15 @@ def create_plotly_visualizations(data):
             color_continuous_scale='Plasma',
             size_max=60
         )
-        fig6.update_layout(height=500)
-        st.plotly_chart(fig6, use_container_width=True, theme="streamlit")
+        fig5.update_layout(height=500)
+        st.plotly_chart(fig5, use_container_width=True, theme="streamlit")
     
-    # 7. Volcano Plot for Gene Expression
+    # 6. Volcano Plot for Gene Expression
     with st.container():
-        st.markdown('<div class="viz-title">7. Genomic Research: Differential Gene Expression</div>', unsafe_allow_html=True)
+        st.markdown('<div class="viz-title">6. Genomic Research: Differential Gene Expression</div>', unsafe_allow_html=True)
         st.markdown('<div class="viz-description">Volcano plot highlighting significant gene expression changes</div>', unsafe_allow_html=True)
         
-        fig7 = px.scatter(
+        fig6 = px.scatter(
             data['genes'],
             x='log2_fold_change',
             y='neg_log10_p',
@@ -321,17 +303,17 @@ def create_plotly_visualizations(data):
             color_discrete_map={True: '#e74c3c', False: '#95a5a6'},
             labels={'neg_log10_p': '-log10(p-value)', 'log2_fold_change': 'Log2 Fold Change'}
         )
-        fig7.add_hline(y=-np.log10(0.05), line_dash="dash", line_color="red", 
+        fig6.add_hline(y=-np.log10(0.05), line_dash="dash", line_color="red", 
                       annotation_text="Significance Threshold (p=0.05)")
-        fig7.update_layout(height=500)
-        st.plotly_chart(fig7, use_container_width=True, theme="streamlit")
+        fig6.update_layout(height=500)
+        st.plotly_chart(fig6, use_container_width=True, theme="streamlit")
     
-    # 8. Advanced Box Plot with Outliers
+    # 7. Advanced Box Plot with Outliers
     with st.container():
-        st.markdown('<div class="viz-title">8. Statistical Distribution Analysis</div>', unsafe_allow_html=True)
+        st.markdown('<div class="viz-title">7. Statistical Distribution Analysis</div>', unsafe_allow_html=True)
         st.markdown('<div class="viz-description">Box plots showing patient metric distributions by province</div>', unsafe_allow_html=True)
         
-        fig8 = px.box(
+        fig7 = px.box(
             data['patients'],
             x='province',
             y='satisfaction_score',
@@ -340,17 +322,17 @@ def create_plotly_visualizations(data):
             title='Patient Satisfaction Distribution by Province',
             template='seaborn'
         )
-        fig8.update_layout(height=500, xaxis_tickangle=45, showlegend=False)
-        st.plotly_chart(fig8, use_container_width=True, theme="streamlit")
+        fig7.update_layout(height=500, xaxis_tickangle=45, showlegend=False)
+        st.plotly_chart(fig7, use_container_width=True, theme="streamlit")
 
 def create_altair_visualizations(data):
     """Create Altair-based declarative visualizations"""
     
     st.markdown('<h2 class="category-header">📊 Altair Declarative Visualizations</h2>', unsafe_allow_html=True)
     
-    # 9. Linked Histograms with Brushing
+    # 8. Linked Histograms with Brushing
     with st.container():
-        st.markdown('<div class="viz-title">9. Interactive Patient Demographics Explorer</div>', unsafe_allow_html=True)
+        st.markdown('<div class="viz-title">8. Interactive Patient Demographics Explorer</div>', unsafe_allow_html=True)
         st.markdown('<div class="viz-description">Linked visualizations with interactive brushing and filtering</div>', unsafe_allow_html=True)
         
         brush = alt.selection_interval(encodings=['x'])
@@ -379,9 +361,9 @@ def create_altair_visualizations(data):
         combined = alt.hconcat(age_hist, gender_chart).resolve_scale(y='independent')
         st.altair_chart(combined, use_container_width=True, theme="streamlit")
     
-    # 10. Stacked Area Chart for Disease Trends
+    # 9. Stacked Area Chart for Disease Trends
     with st.container():
-        st.markdown('<div class="viz-title">10. Disease Prevalence Trends Over Time</div>', unsafe_allow_html=True)
+        st.markdown('<div class="viz-title">9. Disease Prevalence Trends Over Time</div>', unsafe_allow_html=True)
         st.markdown('<div class="viz-description">Stacked area visualization showing disease burden evolution</div>', unsafe_allow_html=True)
         
         area_chart = alt.Chart(data['disease_trends']).mark_area().encode(
@@ -397,9 +379,9 @@ def create_altair_visualizations(data):
         )
         st.altair_chart(area_chart, use_container_width=True, theme="streamlit")
     
-    # 11. Diverging Bar Chart for Satisfaction Scores
+    # 10. Diverging Bar Chart for Satisfaction Scores
     with st.container():
-        st.markdown('<div class="viz-title">11. Patient Satisfaction Analysis</div>', unsafe_allow_html=True)
+        st.markdown('<div class="viz-title">10. Patient Satisfaction Analysis</div>', unsafe_allow_html=True)
         st.markdown('<div class="viz-description">Diverging bar chart showing satisfaction above/below average</div>', unsafe_allow_html=True)
         
         # Calculate province averages
@@ -424,9 +406,9 @@ def create_altair_visualizations(data):
         )
         st.altair_chart(diverging_chart, use_container_width=True, theme="streamlit")
     
-    # 12. Multi-Series Line Chart with Tooltips
+    # 11. Multi-Series Line Chart with Tooltips
     with st.container():
-        st.markdown('<div class="viz-title">12. Hospital Operations Multi-Metric Tracker</div>', unsafe_allow_html=True)
+        st.markdown('<div class="viz-title">11. Hospital Operations Multi-Metric Tracker</div>', unsafe_allow_html=True)
         st.markdown('<div class="viz-description">Interactive multi-line chart with dynamic tooltips</div>', unsafe_allow_html=True)
         
         # Prepare monthly aggregated data
@@ -461,12 +443,12 @@ def create_plotly_statistical_visualizations(data):
     
     st.markdown('<h2 class="category-header">📈 Statistical Visualizations (Plotly)</h2>', unsafe_allow_html=True)
     
-    # 13. Violin Plot for Patient Outcomes (Plotly version)
+    # 12. Violin Plot for Patient Outcomes (Plotly version)
     with st.container():
-        st.markdown('<div class="viz-title">13. Patient Outcome Distribution Analysis</div>', unsafe_allow_html=True)
+        st.markdown('<div class="viz-title">12. Patient Outcome Distribution Analysis</div>', unsafe_allow_html=True)
         st.markdown('<div class="viz-description">Violin plots showing distribution density of satisfaction scores by gender</div>', unsafe_allow_html=True)
         
-        fig13 = px.violin(
+        fig12 = px.violin(
             data['patients'], 
             x='gender', 
             y='satisfaction_score',
@@ -476,21 +458,21 @@ def create_plotly_statistical_visualizations(data):
             title='Patient Satisfaction Score Distribution by Gender',
             color_discrete_map={'Male': '#1f77b4', 'Female': '#ff7f0e'}
         )
-        fig13.update_layout(height=500, showlegend=False)
-        st.plotly_chart(fig13, use_container_width=True, theme="streamlit")
+        fig12.update_layout(height=500, showlegend=False)
+        st.plotly_chart(fig12, use_container_width=True, theme="streamlit")
     
     # 14. Enhanced Correlation Heatmap (already exists - skip duplicate)
     
-    # 15. Health Metrics Correlation Analysis (Simplified for Snowflake)
+    # 13. Health Metrics Correlation Analysis (Simplified for Snowflake)
     with st.container():
-        st.markdown('<div class="viz-title">15. Health Metrics Correlation Heatmap</div>', unsafe_allow_html=True)
+        st.markdown('<div class="viz-title">13. Health Metrics Correlation Heatmap</div>', unsafe_allow_html=True)
         st.markdown('<div class="viz-description">Correlation analysis of patient health metrics</div>', unsafe_allow_html=True)
         
         # Calculate correlation matrix
         numeric_cols = ['age', 'bmi', 'blood_pressure_systolic', 'cholesterol', 'satisfaction_score']
         corr_matrix = data['patients'][numeric_cols].corr()
         
-        fig15 = px.imshow(
+        fig13 = px.imshow(
             corr_matrix,
             text_auto=True,
             aspect="auto",
@@ -498,15 +480,15 @@ def create_plotly_statistical_visualizations(data):
             color_continuous_scale='RdBu_r',
             zmin=-1, zmax=1
         )
-        fig15.update_layout(height=500)
-        st.plotly_chart(fig15, use_container_width=True, theme="streamlit")
+        fig13.update_layout(height=500)
+        st.plotly_chart(fig13, use_container_width=True, theme="streamlit")
     
-    # 16. Enhanced Box Plot with Statistical Annotations (Plotly version)
+    # 14. Enhanced Box Plot with Statistical Annotations (Plotly version)
     with st.container():
-        st.markdown('<div class="viz-title">16. Provincial Health Metrics Comparison</div>', unsafe_allow_html=True)
+        st.markdown('<div class="viz-title">14. Provincial Health Metrics Comparison</div>', unsafe_allow_html=True)
         st.markdown('<div class="viz-description">Statistical comparison of BMI distributions across provinces</div>', unsafe_allow_html=True)
         
-        fig16 = px.box(
+        fig14 = px.box(
             data['patients'], 
             x='province', 
             y='bmi',
@@ -514,21 +496,21 @@ def create_plotly_statistical_visualizations(data):
             title='BMI Distribution by Province',
             color='province'
         )
-        fig16.update_layout(
+        fig14.update_layout(
             height=500, 
             xaxis_tickangle=45,
             showlegend=False
         )
-        st.plotly_chart(fig16, use_container_width=True, theme="streamlit")
+        st.plotly_chart(fig14, use_container_width=True, theme="streamlit")
 
 def create_advanced_plotly_visualizations(data):
     """Create advanced Plotly visualizations"""
     
     st.markdown('<h2 class="category-header">🔬 Advanced Interactive Analytics</h2>', unsafe_allow_html=True)
     
-    # 17. Waterfall Chart for Financial Breakdown
+    # 15. Waterfall Chart for Financial Breakdown
     with st.container():
-        st.markdown('<div class="viz-title">17. Healthcare Cost Breakdown Analysis</div>', unsafe_allow_html=True)
+        st.markdown('<div class="viz-title">15. Healthcare Cost Breakdown Analysis</div>', unsafe_allow_html=True)
         st.markdown('<div class="viz-description">Waterfall chart showing cost component contributions</div>', unsafe_allow_html=True)
         
         # Simulate cost breakdown data
@@ -536,7 +518,7 @@ def create_advanced_plotly_visualizations(data):
         values = [100000, 45000, 25000, 30000, 15000, 0]  # Final total will be calculated
         values[-1] = sum(values[:-1])  # Calculate total
         
-        fig17 = go.Figure(go.Waterfall(
+        fig15 = go.Figure(go.Waterfall(
             name="Cost Breakdown",
             orientation="v",
             measure=["absolute", "relative", "relative", "relative", "relative", "total"],
@@ -550,16 +532,16 @@ def create_advanced_plotly_visualizations(data):
             totals={"marker": {"color": "#3498db"}}
         ))
         
-        fig17.update_layout(
+        fig15.update_layout(
             title="Healthcare Cost Components Waterfall Analysis",
             height=500,
             yaxis_title="Cost (USD)"
         )
-        st.plotly_chart(fig17, use_container_width=True, theme="streamlit")
+        st.plotly_chart(fig15, use_container_width=True, theme="streamlit")
     
-    # 18. Radar Chart for Clinic Performance
+    # 16. Radar Chart for Clinic Performance
     with st.container():
-        st.markdown('<div class="viz-title">18. Multi-Dimensional Clinic Performance Radar</div>', unsafe_allow_html=True)
+        st.markdown('<div class="viz-title">16. Multi-Dimensional Clinic Performance Radar</div>', unsafe_allow_html=True)
         st.markdown('<div class="viz-description">Radar chart comparing clinic performance across multiple metrics</div>', unsafe_allow_html=True)
         
         # Select top 3 clinics
@@ -577,7 +559,7 @@ def create_advanced_plotly_visualizations(data):
         min_wait = top_clinics['avg_wait_time'].min()
         top_clinics['wait_time_norm'] = ((max_wait - top_clinics['avg_wait_time']) / (max_wait - min_wait)) * 100
         
-        fig18 = go.Figure()
+        fig16 = go.Figure()
         
         categories = ['Patient Volume', 'Satisfaction', 'Staff Count', 'Wait Time (inverted)']
         
@@ -590,7 +572,7 @@ def create_advanced_plotly_visualizations(data):
             ]
             values += values[:1]  # Close the radar chart
             
-            fig18.add_trace(go.Scatterpolar(
+            fig16.add_trace(go.Scatterpolar(
                 r=values,
                 theta=categories + categories[:1],
                 fill='toself',
@@ -598,7 +580,7 @@ def create_advanced_plotly_visualizations(data):
                 line=dict(width=2)
             ))
         
-        fig18.update_layout(
+        fig16.update_layout(
             polar=dict(
                 radialaxis=dict(
                     visible=True,
@@ -608,11 +590,11 @@ def create_advanced_plotly_visualizations(data):
             title="Clinic Performance Comparison (Normalized Scores)",
             height=500
         )
-        st.plotly_chart(fig18, use_container_width=True, theme="streamlit")
+        st.plotly_chart(fig16, use_container_width=True, theme="streamlit")
     
-    # 19. Animated Bubble Chart
+    # 17. Animated Bubble Chart
     with st.container():
-        st.markdown('<div class="viz-title">19. Dynamic Province Health Evolution</div>', unsafe_allow_html=True)
+        st.markdown('<div class="viz-title">17. Dynamic Province Health Evolution</div>', unsafe_allow_html=True)
         st.markdown('<div class="viz-description">Animated bubble chart showing health metrics evolution over time</div>', unsafe_allow_html=True)
         
         # Create time-based data for provinces
@@ -634,7 +616,7 @@ def create_advanced_plotly_visualizations(data):
         
         animated_df = pd.DataFrame(animated_data)
         
-        fig19 = px.scatter(
+        fig17 = px.scatter(
             animated_df,
             x='avg_satisfaction',
             y='health_index',
@@ -647,12 +629,12 @@ def create_advanced_plotly_visualizations(data):
             range_x=[6, 9],
             range_y=[50, 100]
         )
-        fig19.update_layout(height=500)
-        st.plotly_chart(fig19, use_container_width=True, theme="streamlit", config={'renderer': 'svg'})
+        fig17.update_layout(height=500)
+        st.plotly_chart(fig17, use_container_width=True, theme="streamlit", config={'renderer': 'svg'})
     
-    # 20. Treemap Visualization
+    # 18. Treemap Visualization
     with st.container():
-        st.markdown('<div class="viz-title">20. Healthcare Resource Allocation Treemap</div>', unsafe_allow_html=True)
+        st.markdown('<div class="viz-title">18. Healthcare Resource Allocation Treemap</div>', unsafe_allow_html=True)
         st.markdown('<div class="viz-description">Hierarchical view of resource distribution across healthcare system</div>', unsafe_allow_html=True)
         
         # Create hierarchical resource data
@@ -676,7 +658,7 @@ def create_advanced_plotly_visualizations(data):
         
         resource_df = pd.DataFrame(resource_data)
         
-        fig20 = px.treemap(
+        fig18 = px.treemap(
             resource_df,
             path=[px.Constant("Healthcare System"), 'category', 'subcategory'],
             values='budget',
@@ -684,23 +666,23 @@ def create_advanced_plotly_visualizations(data):
             color_continuous_scale='RdYlGn',
             title='Healthcare Budget Allocation and Utilization'
         )
-        fig20.update_layout(height=600)
-        st.plotly_chart(fig20, use_container_width=True, theme="streamlit", config={'renderer': 'svg'})
+        fig18.update_layout(height=600)
+        st.plotly_chart(fig18, use_container_width=True, theme="streamlit", config={'renderer': 'svg'})
 
 def create_specialty_visualizations(data):
     """Create specialty and experimental visualizations"""
     
     st.markdown('<h2 class="category-header">🎯 Specialty & Experimental Visualizations</h2>', unsafe_allow_html=True)
     
-    # 21. Sankey Diagram for Patient Flow
+    # 19. Sankey Diagram for Patient Flow
     with st.container():
-        st.markdown('<div class="viz-title">21. Patient Flow Through Healthcare System</div>', unsafe_allow_html=True)
+        st.markdown('<div class="viz-title">19. Patient Flow Through Healthcare System</div>', unsafe_allow_html=True)
         st.markdown('<div class="viz-description">Sankey diagram showing patient journey pathways</div>', unsafe_allow_html=True)
         
         # Create Sankey data
         nodes = ['Emergency Dept', 'Admission', 'Surgery', 'ICU', 'General Ward', 'Discharge', 'Transfer']
         
-        fig21 = go.Figure(data=[go.Sankey(
+        fig19 = go.Figure(data=[go.Sankey(
             node=dict(
                 pad=15,
                 thickness=20,
@@ -716,20 +698,20 @@ def create_specialty_visualizations(data):
             )
         )])
         
-        fig21.update_layout(
+        fig19.update_layout(
             title_text="Patient Flow Through Healthcare System",
             font_size=12,
             height=500
         )
-        st.plotly_chart(fig21, use_container_width=True, theme="streamlit")
+        st.plotly_chart(fig19, use_container_width=True, theme="streamlit")
     
-    # 22. Gauge Chart for KPIs
+    # 20. Gauge Chart for KPIs
     with st.container():
-        st.markdown('<div class="viz-title">22. Real-Time Healthcare KPI Dashboard</div>', unsafe_allow_html=True)
+        st.markdown('<div class="viz-title">20. Real-Time Healthcare KPI Dashboard</div>', unsafe_allow_html=True)
         st.markdown('<div class="viz-description">Gauge charts showing critical performance indicators</div>', unsafe_allow_html=True)
         
         # Create gauge subplots
-        fig22 = make_subplots(
+        fig20 = make_subplots(
             rows=2, cols=2,
             specs=[[{'type': 'indicator'}, {'type': 'indicator'}],
                    [{'type': 'indicator'}, {'type': 'indicator'}]],
@@ -737,7 +719,7 @@ def create_specialty_visualizations(data):
         )
         
         # Satisfaction gauge
-        fig22.add_trace(go.Indicator(
+        fig20.add_trace(go.Indicator(
             mode="gauge+number+delta",
             value=85,
             domain={'x': [0, 1], 'y': [0, 1]},
@@ -754,7 +736,7 @@ def create_specialty_visualizations(data):
             row=1, col=1)
         
         # Bed occupancy gauge
-        fig22.add_trace(go.Indicator(
+        fig20.add_trace(go.Indicator(
             mode="gauge+number",
             value=78,
             title={'text': "Bed Occupancy %"},
@@ -767,7 +749,7 @@ def create_specialty_visualizations(data):
             row=1, col=2)
         
         # Staff efficiency gauge
-        fig22.add_trace(go.Indicator(
+        fig20.add_trace(go.Indicator(
             mode="gauge+number",
             value=92,
             title={'text': "Staff Efficiency %"},
@@ -776,7 +758,7 @@ def create_specialty_visualizations(data):
             row=2, col=1)
         
         # Cost control gauge
-        fig22.add_trace(go.Indicator(
+        fig20.add_trace(go.Indicator(
             mode="gauge+number",
             value=88,
             title={'text': "Cost Control %"},
@@ -784,18 +766,18 @@ def create_specialty_visualizations(data):
                    'bar': {'color': "#f39c12"}}),
             row=2, col=2)
         
-        fig22.update_layout(height=600, title_text="Healthcare KPI Dashboard")
-        st.plotly_chart(fig22, use_container_width=True, theme="streamlit")
+        fig20.update_layout(height=600, title_text="Healthcare KPI Dashboard")
+        st.plotly_chart(fig20, use_container_width=True, theme="streamlit")
     
-    # 23. Funnel Chart for Patient Conversion
+    # 21. Funnel Chart for Patient Conversion
     with st.container():
-        st.markdown('<div class="viz-title">23. Patient Care Conversion Funnel</div>', unsafe_allow_html=True)
+        st.markdown('<div class="viz-title">21. Patient Care Conversion Funnel</div>', unsafe_allow_html=True)
         st.markdown('<div class="viz-description">Funnel analysis showing patient progression through care stages</div>', unsafe_allow_html=True)
         
         stages = ['Initial Consultation', 'Diagnosis', 'Treatment Plan', 'Treatment Start', 'Treatment Complete', 'Follow-up']
         values = [1000, 850, 720, 680, 620, 580]
         
-        fig23 = go.Figure(go.Funnel(
+        fig21 = go.Figure(go.Funnel(
             y=stages,
             x=values,
             textinfo="value+percent initial",
@@ -805,11 +787,11 @@ def create_specialty_visualizations(data):
             marker={"color": ["#e74c3c", "#e67e22", "#f39c12", "#2ecc71", "#27ae60", "#16a085"]}
         ))
         
-        fig23.update_layout(
+        fig21.update_layout(
             title="Patient Care Journey Conversion Rates",
             height=500
         )
-        st.plotly_chart(fig23, use_container_width=True, theme="streamlit")
+        st.plotly_chart(fig21, use_container_width=True, theme="streamlit")
 
 def main():
     """Main function to run the visualization gallery"""
@@ -836,7 +818,7 @@ def main():
     # Statistics about the gallery
     col1, col2, col3, col4 = st.columns(4)
     with col1:
-        st.metric("Total Visualizations", "23", help="Comprehensive gallery of chart types")
+        st.metric("Total Visualizations", "22", help="Comprehensive gallery of chart types")
     with col2:
         st.metric("Libraries Used", "2", help="Plotly, Altair (Snowflake compatible)")
     with col3:
