@@ -1,28 +1,11 @@
-# Quantium Healthcare Analytics Platform - Streamlit in Snowflake Compatible
-# Only packages available in Snowflake Anaconda channel
-# Reference: https://repo.anaconda.com/pkgs/snowflake/
+# Streamlit in Snowflake - Empty Requirements
+# All necessary packages appear to be pre-installed based on the screenshot:
+# - altair (5.5.0)
+# - numpy (2.3.1)  
+# - pandas (2.2.3)
+# - plotly (6.0.1)
+# - scikit-learn (1.6.1)
+# - scipy (1.15.3)
+# - snowflake-snowpark-python (Latest)
 
-# Core Streamlit (pre-installed in Snowflake)
-# streamlit - Already available in Snowflake environment
-
-# Data Processing (pre-installed)
-# pandas - Already available in Snowflake environment  
-# numpy - Already available in Snowflake environment
-
-# Snowflake Integration (pre-installed)
-# snowflake-snowpark-python - Already available in Snowflake environment
-
-# Visualization Libraries (available in Snowflake conda channel)
-plotly
-altair
-
-# Date/Time Handling (standard library)
-# python-dateutil - Part of standard Python distribution
-
-# Additional visualization libraries available in Snowflake conda channel
-# Note: matplotlib and seaborn are available but may have version conflicts
-# We'll rely on Plotly and Altair for visualizations
-
-# Statistical computing (available)
-scipy
-scikit-learn
+# No additional packages needed - using only pre-installed libraries
