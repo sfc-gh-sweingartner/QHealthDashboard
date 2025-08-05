@@ -6,9 +6,9 @@ import pandas as pd
 import numpy as np
 import time
 from datetime import datetime, timedelta
-import seaborn as sns
-import matplotlib.pyplot as plt
 import altair as alt
+# Note: matplotlib and seaborn removed due to Snowflake conda channel compatibility
+# Using Plotly and Altair for all visualizations to ensure compatibility
 
 # Import custom modules
 from utils.snowflake_conn import ensure_connection, execute_query
@@ -454,72 +454,69 @@ def create_altair_visualizations(data):
         combined = (lines + points + text).resolve_scale(color='independent')
         st.altair_chart(combined, use_container_width=True, theme="streamlit")
 
-def create_seaborn_matplotlib_visualizations(data):
-    """Create Seaborn and Matplotlib statistical visualizations"""
+def create_plotly_statistical_visualizations(data):
+    """Create statistical visualizations using Plotly (Snowflake compatible)"""
     
-    st.markdown('<h2 class="category-header">📈 Statistical Visualizations (Seaborn & Matplotlib)</h2>', unsafe_allow_html=True)
+    st.markdown('<h2 class="category-header">📈 Statistical Visualizations (Plotly)</h2>', unsafe_allow_html=True)
     
-    # 13. Violin Plot for Patient Outcomes
+    # 13. Violin Plot for Patient Outcomes (Plotly version)
     with st.container():
         st.markdown('<div class="viz-title">13. Patient Outcome Distribution Analysis</div>', unsafe_allow_html=True)
         st.markdown('<div class="viz-description">Violin plots showing distribution density of satisfaction scores by gender</div>', unsafe_allow_html=True)
         
-        plt.figure(figsize=(12, 6))
-        sns.set_style("whitegrid")
-        sns.violinplot(data=data['patients'], x='gender', y='satisfaction_score', 
-                      palette=['#1f77b4', '#ff7f0e'], inner='quartile')
-        plt.title('Patient Satisfaction Score Distribution by Gender', fontsize=16, fontweight='bold')
-        plt.xlabel('Gender', fontsize=12)
-        plt.ylabel('Satisfaction Score', fontsize=12)
-        st.pyplot(plt)
-        plt.close()
+        fig13 = px.violin(
+            data['patients'], 
+            x='gender', 
+            y='satisfaction_score',
+            color='gender',
+            box=True,
+            points='outliers',
+            title='Patient Satisfaction Score Distribution by Gender',
+            color_discrete_map={'Male': '#1f77b4', 'Female': '#ff7f0e'}
+        )
+        fig13.update_layout(height=500, showlegend=False)
+        st.plotly_chart(fig13, use_container_width=True, theme="streamlit")
     
-    # 14. Correlation Heatmap with Annotations
-    with st.container():
-        st.markdown('<div class="viz-title">14. Patient Health Metrics Correlation Matrix</div>', unsafe_allow_html=True)
-        st.markdown('<div class="viz-description">Comprehensive correlation analysis of patient health indicators</div>', unsafe_allow_html=True)
-        
-        # Select numeric columns for correlation
-        numeric_cols = ['age', 'bmi', 'blood_pressure_systolic', 'cholesterol', 'satisfaction_score']
-        corr_matrix = data['patients'][numeric_cols].corr()
-        
-        plt.figure(figsize=(10, 8))
-        sns.heatmap(corr_matrix, annot=True, cmap='RdBu_r', center=0, 
-                   square=True, linewidths=0.5, cbar_kws={"shrink": .8})
-        plt.title('Patient Health Metrics Correlation Matrix', fontsize=16, fontweight='bold')
-        plt.tight_layout()
-        st.pyplot(plt)
-        plt.close()
+    # 14. Enhanced Correlation Heatmap (already exists - skip duplicate)
     
-    # 15. Pair Plot for Multi-variable Relationships
+    # 15. Multi-Variable Scatter Matrix (Plotly version)
     with st.container():
         st.markdown('<div class="viz-title">15. Multi-Variable Health Relationship Explorer</div>', unsafe_allow_html=True)
-        st.markdown('<div class="viz-description">Comprehensive pairwise analysis of patient health metrics</div>', unsafe_allow_html=True)
+        st.markdown('<div class="viz-description">Comprehensive scatter matrix of patient health metrics</div>', unsafe_allow_html=True)
         
-        # Sample data for performance
-        sample_data = data['patients'][['age', 'bmi', 'blood_pressure_systolic', 'cholesterol', 'gender']].sample(500)
+        # Select numeric columns for scatter matrix
+        numeric_cols = ['age', 'bmi', 'blood_pressure_systolic', 'cholesterol', 'satisfaction_score']
+        sample_data = data['patients'][numeric_cols + ['gender']].sample(500)
         
-        g = sns.pairplot(sample_data, hue='gender', diag_kind='kde', 
-                        palette=['#1f77b4', '#ff7f0e'], corner=True)
-        g.fig.suptitle('Patient Health Metrics Pairwise Analysis', y=1.02, fontsize=16, fontweight='bold')
-        st.pyplot(g.fig)
-        plt.close()
+        fig15 = px.scatter_matrix(
+            sample_data,
+            dimensions=numeric_cols,
+            color='gender',
+            title='Patient Health Metrics Scatter Matrix Analysis',
+            color_discrete_map={'Male': '#1f77b4', 'Female': '#ff7f0e'}
+        )
+        fig15.update_layout(height=700, width=700)
+        st.plotly_chart(fig15, use_container_width=True, theme="streamlit")
     
-    # 16. Advanced Box Plot with Statistical Annotations
+    # 16. Enhanced Box Plot with Statistical Annotations (Plotly version)
     with st.container():
         st.markdown('<div class="viz-title">16. Provincial Health Metrics Comparison</div>', unsafe_allow_html=True)
         st.markdown('<div class="viz-description">Statistical comparison of BMI distributions across provinces</div>', unsafe_allow_html=True)
         
-        plt.figure(figsize=(14, 8))
-        sns.boxplot(data=data['patients'], x='province', y='bmi', 
-                   palette='Set3', showfliers=True)
-        plt.xticks(rotation=45, ha='right')
-        plt.title('BMI Distribution by Province', fontsize=16, fontweight='bold')
-        plt.xlabel('Province', fontsize=12)
-        plt.ylabel('Body Mass Index (BMI)', fontsize=12)
-        plt.tight_layout()
-        st.pyplot(plt)
-        plt.close()
+        fig16 = px.box(
+            data['patients'], 
+            x='province', 
+            y='bmi',
+            points='outliers',
+            title='BMI Distribution by Province',
+            color='province'
+        )
+        fig16.update_layout(
+            height=500, 
+            xaxis_tickangle=45,
+            showlegend=False
+        )
+        st.plotly_chart(fig16, use_container_width=True, theme="streamlit")
 
 def create_advanced_plotly_visualizations(data):
     """Create advanced Plotly visualizations"""
@@ -838,7 +835,7 @@ def main():
     with col1:
         st.metric("Total Visualizations", "23", help="Comprehensive gallery of chart types")
     with col2:
-        st.metric("Libraries Used", "4", help="Plotly, Altair, Seaborn, Matplotlib")
+        st.metric("Libraries Used", "2", help="Plotly, Altair (Snowflake compatible)")
     with col3:
         st.metric("Sample Data Points", "5,000+", help="Rich synthetic healthcare dataset")
     with col4:
@@ -848,7 +845,7 @@ def main():
     tab1, tab2, tab3, tab4, tab5 = st.tabs([
         "🚀 Plotly Interactive", 
         "📊 Altair Declarative", 
-        "📈 Statistical Plots",
+        "📈 Statistical Analysis",
         "🔬 Advanced Analytics",
         "🎯 Specialty Charts"
     ])
@@ -860,7 +857,7 @@ def main():
         create_altair_visualizations(data)
     
     with tab3:
-        create_seaborn_matplotlib_visualizations(data)
+        create_plotly_statistical_visualizations(data)
     
     with tab4:
         create_advanced_plotly_visualizations(data)
@@ -876,6 +873,7 @@ def main():
         <p><strong>Interactive Features:</strong> Brushing, Linking, Animations, Hover Details, Selection Events</p>
         <p><strong>Chart Types:</strong> 3D Scatter, Volcano Plots, Sankey Diagrams, Radar Charts, Treemaps, Gauges</p>
         <p><strong>Statistical Analysis:</strong> Correlations, Distributions, Clustering, Anomaly Detection</p>
+        <p><strong>Snowflake Compatible:</strong> Uses only Plotly & Altair from Snowflake Anaconda channel</p>
         <p><strong>Professional Aesthetics:</strong> Custom Color Palettes, Typography, Layouts, Themes</p>
         <br>
         <p>🎯 <strong>Demo Purpose:</strong> Showcasing Streamlit's capability to create publication-quality, 

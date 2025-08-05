@@ -189,8 +189,9 @@ def main():
             <p><strong>Showcase of Streamlit's Visual Power</strong></p>
             <ul>
                 <li>23+ Professional Visualizations</li>
-                <li>Interactive Plotly, Altair, Seaborn charts</li>
+                <li>Interactive Plotly & Altair charts</li>
                 <li>3D plots, animations, statistical analysis</li>
+                <li>Snowflake conda channel compatible</li>
                 <li>Competing with Power BI & Tableau</li>
                 <li>Publication-quality aesthetics</li>
             </ul>
