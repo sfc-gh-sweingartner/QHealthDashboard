@@ -2,6 +2,7 @@ import streamlit as st
 import plotly.express as px
 import plotly.graph_objects as go
 import pandas as pd
+import numpy as np
 import time
 from datetime import datetime, timedelta
 
@@ -329,9 +330,32 @@ def create_trends_analysis(data):
             data['trends'],
             x='TOTAL_CLAIMS',
             y='TOTAL_PAID',
-            title="Claims Volume vs Payments Correlation",
-            trendline="ols"
+            title="Claims Volume vs Payments Correlation"
         )
+        
+        # Add simple linear trend line using numpy (no statsmodels dependency)
+        try:
+            x_vals = data['trends']['TOTAL_CLAIMS'].dropna()
+            y_vals = data['trends']['TOTAL_PAID'].dropna()
+            if len(x_vals) > 1 and len(y_vals) > 1:
+                # Use numpy polyfit for simple linear regression
+                z = np.polyfit(x_vals, y_vals, 1)
+                p = np.poly1d(z)
+                
+                # Add trend line
+                x_trend = np.linspace(x_vals.min(), x_vals.max(), 100)
+                y_trend = p(x_trend)
+                
+                fig.add_trace(go.Scatter(
+                    x=x_trend,
+                    y=y_trend,
+                    mode='lines',
+                    name='Trend Line',
+                    line=dict(color='red', width=2, dash='dash')
+                ))
+        except Exception:
+            # If trend line fails, continue without it
+            pass
         fig.update_layout(height=400)
         st.plotly_chart(fig, use_container_width=True)
     

@@ -5,6 +5,8 @@ from plotly.subplots import make_subplots
 import pandas as pd
 from typing import Dict, List, Any, Optional
 import time
+import numpy as np
+from scipy import interpolate
 
 def create_metric_card(title: str, value: str, subtitle: str = ""):
     """Create a styled metric card"""
@@ -137,11 +139,14 @@ def create_hierarchy_sunburst(df: pd.DataFrame, hierarchy_cols: List[str], value
 
 def create_trend_analysis(df: pd.DataFrame, date_col: str, value_col: str, 
                          category_col: Optional[str] = None, title: str = "Trend Analysis"):
-    """Create time series trend analysis"""
+    """Create time series trend analysis using scipy for trend lines"""
     
     # Convert date column to pandas datetime to ensure compatibility with plotly
     df = df.copy()
     df[date_col] = pd.to_datetime(df[date_col])
+    
+    # Sort by date for proper trend line calculation
+    df = df.sort_values(date_col)
     
     if category_col:
         fig = px.line(
@@ -161,10 +166,38 @@ def create_trend_analysis(df: pd.DataFrame, date_col: str, value_col: str,
             markers=True
         )
     
-    # Add trend line
-    fig.add_traces(
-        px.scatter(df, x=date_col, y=value_col, trendline="lowess").data
-    )
+    # Add smooth trend line using scipy interpolation instead of statsmodels
+    try:
+        # Convert dates to numeric for interpolation
+        x_numeric = np.arange(len(df))
+        y_values = df[value_col].dropna()
+        x_values = x_numeric[:len(y_values)]
+        
+        if len(x_values) > 3:  # Need at least 4 points for interpolation
+            # Use scipy's UnivariateSpline for smooth trend line
+            spline = interpolate.UnivariateSpline(x_values, y_values, s=len(y_values))
+            
+            # Generate smooth curve points
+            x_smooth = np.linspace(x_values.min(), x_values.max(), len(x_values) * 2)
+            y_smooth = spline(x_smooth)
+            
+            # Map back to datetime for plotting
+            date_smooth = pd.date_range(start=df[date_col].min(), end=df[date_col].max(), periods=len(x_smooth))
+            
+            # Add trend line to figure
+            fig.add_trace(
+                go.Scatter(
+                    x=date_smooth,
+                    y=y_smooth,
+                    mode='lines',
+                    name='Trend Line',
+                    line=dict(color='red', width=2, dash='dash'),
+                    hovertemplate='Trend: %{y:.2f}<extra></extra>'
+                )
+            )
+    except Exception:
+        # If trend line calculation fails, continue without it
+        pass
     
     fig.update_layout(
         height=400,

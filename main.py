@@ -5,7 +5,7 @@ from datetime import datetime
 import time
 
 # Import custom modules
-from utils.snowflake_conn import get_snowflake_connection, test_connection
+from utils.snowflake_conn import get_snowflake_connection, test_connection, execute_query
 from utils.viz_components import create_metric_card, create_performance_monitor
 
 # Page configuration
@@ -123,7 +123,7 @@ def main():
         
         # Visualisations Gallery
         if st.button("🎨 Visualisations Gallery", key="visualisations", help="Showcase of Advanced Visualizations"):
-            st.switch_page("pages/visualisations_basic.py")
+            st.switch_page("pages/visualisations.py")
 
         st.markdown("---")
         
@@ -199,7 +199,7 @@ def main():
         """, unsafe_allow_html=True)
         
         if st.button("Explore Gallery →", key="launch_gallery"):
-            st.switch_page("pages/visualisations_basic.py")
+            st.switch_page("pages/visualisations.py")
     
     with col2:
         st.markdown("""

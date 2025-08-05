@@ -205,7 +205,7 @@ def create_plotly_visualizations(data):
             template='plotly_white'
         )
         fig1.update_layout(height=500, font=dict(size=12))
-        st.plotly_chart(fig1, use_container_width=True, theme="streamlit")
+        st.plotly_chart(fig1, use_container_width=True, theme="streamlit", config={'renderer': 'svg'})
     
     # 2. Animated Time Series for Hospital Metrics
     with st.container():
@@ -250,7 +250,7 @@ def create_plotly_visualizations(data):
             template='plotly_dark'
         )
         fig3.update_layout(height=600, scene=dict(camera=dict(eye=dict(x=1.5, y=1.5, z=1.5))))
-        st.plotly_chart(fig3, use_container_width=True, theme="streamlit")
+        st.plotly_chart(fig3, use_container_width=True, theme="streamlit", config={'renderer': 'svg'})
     
     # 4. Clinical Biomarker Correlation Heatmap
     with st.container():
@@ -496,7 +496,7 @@ def create_plotly_statistical_visualizations(data):
             color_discrete_map={'Male': '#1f77b4', 'Female': '#ff7f0e'}
         )
         fig15.update_layout(height=700, width=700)
-        st.plotly_chart(fig15, use_container_width=True, theme="streamlit")
+        st.plotly_chart(fig15, use_container_width=True, theme="streamlit", config={'renderer': 'svg'})
     
     # 16. Enhanced Box Plot with Statistical Annotations (Plotly version)
     with st.container():
@@ -645,7 +645,7 @@ def create_advanced_plotly_visualizations(data):
             range_y=[50, 100]
         )
         fig19.update_layout(height=500)
-        st.plotly_chart(fig19, use_container_width=True, theme="streamlit")
+        st.plotly_chart(fig19, use_container_width=True, theme="streamlit", config={'renderer': 'svg'})
     
     # 20. Treemap Visualization
     with st.container():
@@ -682,7 +682,7 @@ def create_advanced_plotly_visualizations(data):
             title='Healthcare Budget Allocation and Utilization'
         )
         fig20.update_layout(height=600)
-        st.plotly_chart(fig20, use_container_width=True, theme="streamlit")
+        st.plotly_chart(fig20, use_container_width=True, theme="streamlit", config={'renderer': 'svg'})
 
 def create_specialty_visualizations(data):
     """Create specialty and experimental visualizations"""
