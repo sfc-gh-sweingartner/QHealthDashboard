@@ -5,7 +5,7 @@ from datetime import datetime
 import time
 
 # Import custom modules
-from utils.snowflake_conn import get_snowflake_connection, test_connection, execute_query
+from utils.snowflake_conn import get_snowflake_connection, test_connection, execute_query, execute_cache_clear_query
 from utils.viz_components import create_metric_card, create_performance_monitor
 
 # Page configuration
@@ -136,6 +136,51 @@ def main():
             st.markdown(f'<span class="performance-badge">🚀 {load_time:.1f}s</span>', unsafe_allow_html=True)
         else:
             st.warning(f"⚠️ Load time: {load_time:.1f}s")
+        
+        st.markdown("---")
+        
+        # Cache Management
+        st.markdown("### 🧹 Cache Management")
+        st.markdown("*For performance testing*")
+        
+        # Clear Snowflake Cache Button
+        if st.button("🗑️ Clear Snowflake Cache", key="clear_sf_cache", help="Suspend/resume warehouse to clear query cache"):
+            if st.session_state.connection_status == 'Connected ✅':
+                try:
+                    conn = st.session_state.snowflake_connection
+                    with st.spinner("Clearing Snowflake cache..."):
+                        # Suspend and resume the warehouse to clear cache
+                        execute_cache_clear_query(conn, "ALTER WAREHOUSE MYWH SUSPEND")
+                        time.sleep(1)  # Brief pause
+                        execute_cache_clear_query(conn, "ALTER WAREHOUSE MYWH RESUME")
+                        
+                        # Also disable result caching for the session
+                        execute_cache_clear_query(conn, "ALTER SESSION SET USE_CACHED_RESULT = FALSE")
+                        
+                    st.success("✅ Snowflake cache cleared! MYWH warehouse restarted.")
+                except Exception as e:
+                    st.error(f"❌ Failed to clear Snowflake cache: {str(e)}")
+            else:
+                st.warning("⚠️ No Snowflake connection available")
+        
+        # Clear Streamlit Cache Button  
+        if st.button("🗑️ Clear Streamlit Cache", key="clear_st_cache", help="Clear all Streamlit cached data and resources"):
+            try:
+                with st.spinner("Clearing Streamlit cache..."):
+                    # Clear all Streamlit caches
+                    st.cache_data.clear()
+                    st.cache_resource.clear()
+                    
+                    # Clear specific connection cache by clearing session state
+                    if 'snowflake_connection' in st.session_state:
+                        st.session_state.snowflake_connection = None
+                        st.session_state.connection_status = 'Not Connected'
+                    
+                st.success("✅ Streamlit cache cleared! Page will reconnect automatically.")
+                time.sleep(0.5)  # Brief pause before rerun
+                st.rerun()
+            except Exception as e:
+                st.error(f"❌ Failed to clear Streamlit cache: {str(e)}")
     
     # Main Content Area
     col1, col2 = st.columns(2)

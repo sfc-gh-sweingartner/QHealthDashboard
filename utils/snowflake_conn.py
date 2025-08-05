@@ -186,3 +186,23 @@ def get_query_performance_stats(_conn: Union[snowflake.connector.SnowflakeConnec
         pass
     
     return {'avg_time': 0, 'max_time': 0, 'query_count': 0}
+
+def execute_cache_clear_query(_conn: Union[snowflake.connector.SnowflakeConnection, object], query: str) -> bool:
+    """
+    Execute SQL query for cache clearing without caching.
+    Returns True if successful, False otherwise.
+    """
+    try:
+        # Handle both session and connection types
+        if hasattr(_conn, 'sql'):  # Snowpark session
+            _conn.sql(query).collect()
+        else:  # Regular connection
+            cursor = _conn.cursor()
+            cursor.execute(query)
+            cursor.close()
+        
+        return True
+        
+    except Exception as e:
+        st.error(f"Cache clear query failed: {str(e)}")
+        return False
