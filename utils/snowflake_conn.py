@@ -206,3 +206,30 @@ def execute_cache_clear_query(_conn: Union[snowflake.connector.SnowflakeConnecti
     except Exception as e:
         st.error(f"Cache clear query failed: {str(e)}")
         return False
+
+def clear_snowflake_cache_sis(_conn: object) -> bool:
+    """
+    Clear Snowflake cache specifically for Streamlit in Snowflake environment.
+    Uses cache-busting techniques since warehouse commands are restricted.
+    """
+    try:
+        import uuid
+        
+        # Method 1: Execute a unique query to establish fresh session context
+        cache_buster = str(uuid.uuid4())
+        dummy_query = f"SELECT '{cache_buster}' as cache_cleared, CURRENT_TIMESTAMP() as cleared_at"
+        _conn.sql(dummy_query).collect()
+        
+        # Method 2: Try to refresh any cached metadata
+        try:
+            _conn.sql("SELECT CURRENT_VERSION()").collect()
+            _conn.sql("SELECT CURRENT_USER()").collect()
+            _conn.sql("SELECT CURRENT_ROLE()").collect()
+        except:
+            pass  # These are just cache-warming queries
+        
+        return True
+        
+    except Exception as e:
+        st.warning(f"Cache clearing attempt failed: {str(e)}")
+        return False

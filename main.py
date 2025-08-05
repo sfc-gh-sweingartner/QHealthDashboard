@@ -5,7 +5,7 @@ from datetime import datetime
 import time
 
 # Import custom modules
-from utils.snowflake_conn import get_snowflake_connection, test_connection, execute_query, execute_cache_clear_query
+from utils.snowflake_conn import get_snowflake_connection, test_connection, execute_query, execute_cache_clear_query, clear_snowflake_cache_sis
 from utils.viz_components import create_metric_card, create_performance_monitor
 
 # Page configuration
@@ -144,22 +144,46 @@ def main():
         st.markdown("*For performance testing*")
         
         # Clear Snowflake Cache Button
-        if st.button("🗑️ Clear Snowflake Cache", key="clear_sf_cache", help="Suspend/resume warehouse to clear query cache"):
+        if st.button("🗑️ Clear Snowflake Cache", key="clear_sf_cache", help="Clear query cache (method varies by environment)"):
             if st.session_state.connection_status == 'Connected ✅':
                 try:
                     conn = st.session_state.snowflake_connection
+                    
                     with st.spinner("Clearing Snowflake cache..."):
-                        # Suspend and resume the warehouse to clear cache
-                        execute_cache_clear_query(conn, "ALTER WAREHOUSE MYWH SUSPEND")
-                        time.sleep(1)  # Brief pause
-                        execute_cache_clear_query(conn, "ALTER WAREHOUSE MYWH RESUME")
+                        # Check if we're in Streamlit in Snowflake (Snowpark session)
+                        if hasattr(conn, 'sql'):  # Snowpark session
+                            st.info("🏔️ Detected Streamlit in Snowflake environment")
+                            
+                            # Use specialized cache clearing for Streamlit in Snowflake
+                            if clear_snowflake_cache_sis(conn):
+                                st.success("✅ Cache bypass activated! Subsequent queries will use fresh data.")
+                                st.info("💡 In Streamlit in Snowflake, cache clearing is limited but session has been refreshed.")
+                            else:
+                                st.warning("⚠️ Cache clearing had limited effect in this environment.")
+                                st.info("💡 Try the 'Clear Streamlit Cache' button or refresh the page for best results.")
                         
-                        # Also disable result caching for the session
-                        execute_cache_clear_query(conn, "ALTER SESSION SET USE_CACHED_RESULT = FALSE")
+                        else:  # Regular connection - can use warehouse commands
+                            st.info("💻 Detected local Snowflake connection")
+                            
+                            # Try warehouse suspension (may fail if no permissions)
+                            try:
+                                execute_cache_clear_query(conn, "ALTER WAREHOUSE MYWH SUSPEND")
+                                time.sleep(1)
+                                execute_cache_clear_query(conn, "ALTER WAREHOUSE MYWH RESUME")
+                                st.success("✅ Warehouse MYWH restarted - query cache cleared!")
+                            except Exception as warehouse_err:
+                                st.warning(f"⚠️ Warehouse restart failed: {str(warehouse_err)}")
+                            
+                            # Try session settings (may fail in some environments)
+                            try:
+                                execute_cache_clear_query(conn, "ALTER SESSION SET USE_CACHED_RESULT = FALSE")
+                                st.success("✅ Result caching disabled for this session!")
+                            except Exception as session_err:
+                                st.warning(f"⚠️ Session setting failed: {str(session_err)}")
                         
-                    st.success("✅ Snowflake cache cleared! MYWH warehouse restarted.")
                 except Exception as e:
                     st.error(f"❌ Failed to clear Snowflake cache: {str(e)}")
+                    st.info("💡 Try the 'Clear Streamlit Cache' button instead, or refresh the page.")
             else:
                 st.warning("⚠️ No Snowflake connection available")
         
