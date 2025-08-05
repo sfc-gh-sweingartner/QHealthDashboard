@@ -233,16 +233,35 @@ def main():
     if st.session_state.connection_status == 'Connected ✅':
         st.markdown("## 🔍 Quick Data Overview")
         
-        # Sample visualization (placeholder for real data)
-        fig = px.bar(
-            x=['Q.CheckUp Lite', 'Q.Dose'],
-            y=[1100000, 1200000],
-            title="Records by Product",
-            color=['Q.CheckUp Lite', 'Q.Dose'],
-            color_discrete_map={'Q.CheckUp Lite': '#1f77b4', 'Q.Dose': '#ff7f0e'}
-        )
-        fig.update_layout(height=400, showlegend=False)
-        st.plotly_chart(fig, use_container_width=True)
+        try:
+            # Get real data from Snowflake
+            conn = st.session_state.snowflake_connection
+            
+            # Query for healthcare claims count
+            healthcare_query = "SELECT COUNT(*) as count FROM QUANTIUM_HEALTHCARE_DEMO.QUANTIUM_HEALTHCARE_DEMO.HEALTHCARE_CLAIMS"
+            healthcare_df = execute_query(conn, healthcare_query)
+            healthcare_count = healthcare_df['COUNT'].iloc[0] if not healthcare_df.empty else 0
+            
+            # Query for pharmaceutical claims count  
+            pharma_query = "SELECT COUNT(*) as count FROM QUANTIUM_HEALTHCARE_DEMO.QUANTIUM_HEALTHCARE_DEMO.PHARMACEUTICAL_CLAIMS"
+            pharma_df = execute_query(conn, pharma_query)
+            pharma_count = pharma_df['COUNT'].iloc[0] if not pharma_df.empty else 0
+            
+            # Create visualization with real data
+            fig = px.bar(
+                x=['Q.CheckUp Lite', 'Q.Dose'],
+                y=[healthcare_count, pharma_count],
+                title="Records by Product",
+                color=['Q.CheckUp Lite', 'Q.Dose'],
+                color_discrete_map={'Q.CheckUp Lite': '#1f77b4', 'Q.Dose': '#ff7f0e'}
+            )
+            fig.update_layout(height=400, showlegend=False)
+            st.plotly_chart(fig, use_container_width=True)
+            
+        except Exception as e:
+            st.error(f"Failed to load data: {str(e)}")
+            # Fallback to basic message
+            st.info("Data overview will be available once Snowflake connection is established")
     
     else:
         st.info("🔗 Connect to Snowflake to see live data overview")

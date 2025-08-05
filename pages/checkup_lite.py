@@ -254,16 +254,29 @@ def create_product_analysis(data):
     col1, col2 = st.columns(2)
     
     with col1:
-        # Claims by product category
+        # Claims by product category with improved Snowflake compatibility
         fig = px.treemap(
             level_1_summary,
             path=['LEVEL_1'],
             values='TOTAL_CLAIMS',
             title="Claims by Product Category",
             color='TOTAL_PAID',
-            color_continuous_scale='Blues'
+            color_continuous_scale='Viridis',  # Better color scale for Snowflake
+            labels={'TOTAL_PAID': 'Total Paid (R)', 'TOTAL_CLAIMS': 'Total Claims'}
         )
-        fig.update_layout(height=500)
+        fig.update_traces(
+            textinfo="label+value+percent entry",
+            textfont_size=12,
+            marker=dict(
+                colorbar=dict(title="Total Paid (R)"),
+                line=dict(width=2, color='white')  # Add borders for better definition
+            )
+        )
+        fig.update_layout(
+            height=500,
+            font=dict(size=10),
+            margin=dict(t=50, l=25, r=25, b=25)
+        )
         st.plotly_chart(fig, use_container_width=True)
     
     with col2:
