@@ -1,1 +1,2 @@
-# No additional packages needed - using stage packages
+# Empty requirements - using only pre-installed Snowflake packages
+# This ensures maximum compatibility and zero deployment conflicts
