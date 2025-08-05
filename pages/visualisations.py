@@ -188,47 +188,49 @@ def create_plotly_visualizations(data):
     
     st.markdown('<h2 class="category-header">🚀 Plotly Interactive Visualizations</h2>', unsafe_allow_html=True)
     
-    # 1. Interactive Patient Cohort Scatter Plot
+    # 1. Patient Demographics Scatter Plot (Simplified for Snowflake)
     with st.container():
-        st.markdown('<div class="viz-title">1. Interactive Patient Cohort Analysis</div>', unsafe_allow_html=True)
-        st.markdown('<div class="viz-description">Explore correlations between age, cholesterol, and BMI with gender segmentation</div>', unsafe_allow_html=True)
+        st.markdown('<div class="viz-title">1. Patient Demographics Analysis</div>', unsafe_allow_html=True)
+        st.markdown('<div class="viz-description">Explore correlations between age and cholesterol with gender segmentation</div>', unsafe_allow_html=True)
         
         fig1 = px.scatter(
             data['patients'],
             x='age',
             y='cholesterol',
             color='gender',
-            size='bmi',
-            hover_data=['patient_id', 'province', 'satisfaction_score'],
-            title='Patient Demographics: Age vs Cholesterol (sized by BMI)',
+            hover_data=['province', 'satisfaction_score', 'bmi'],
+            title='Patient Demographics: Age vs Cholesterol by Gender',
             color_discrete_map={'Male': '#1f77b4', 'Female': '#ff7f0e'},
             template='plotly_white'
         )
         fig1.update_layout(height=500, font=dict(size=12))
-        st.plotly_chart(fig1, use_container_width=True, theme="streamlit", config={'renderer': 'svg'})
+        st.plotly_chart(fig1, use_container_width=True, theme="streamlit")
     
-    # 2. Animated Time Series for Hospital Metrics
+    # 2. Hospital Operations Multi-Line Chart (Simplified for Snowflake)
     with st.container():
-        st.markdown('<div class="viz-title">2. Dynamic Hospital Operations Dashboard</div>', unsafe_allow_html=True)
-        st.markdown('<div class="viz-description">Real-time view of admissions, discharges, and bed occupancy over time</div>', unsafe_allow_html=True)
+        st.markdown('<div class="viz-title">2. Hospital Operations Dashboard</div>', unsafe_allow_html=True)
+        st.markdown('<div class="viz-description">Multi-line view of admissions, discharges, and bed occupancy over time</div>', unsafe_allow_html=True)
         
-        # Prepare data for animation
-        ts_melted = data['time_series'].melt(
+        # Prepare data - sample every 30 days for better performance
+        ts_sample = data['time_series'][::30].copy()  # Every 30th day
+        ts_melted = ts_sample.melt(
             id_vars=['date'], 
             value_vars=['admissions', 'discharges', 'bed_occupancy'],
             var_name='metric', value_name='value'
         )
-        ts_melted['month'] = ts_melted['date'].dt.to_period('M').astype(str)
-        ts_monthly = ts_melted.groupby(['month', 'metric'])['value'].mean().reset_index()
         
         fig2 = px.line(
-            ts_monthly,
-            x='month',
+            ts_melted,
+            x='date',
             y='value',
             color='metric',
-            title='Hospital Operations Trends (Monthly Averages)',
-            animation_frame='month',
-            range_y=[0, ts_monthly['value'].max() * 1.1]
+            title='Hospital Operations Trends (Sampled)',
+            markers=True,
+            color_discrete_map={
+                'admissions': '#1f77b4',
+                'discharges': '#ff7f0e', 
+                'bed_occupancy': '#2ca02c'
+            }
         )
         fig2.update_layout(height=500, xaxis_tickangle=45)
         st.plotly_chart(fig2, use_container_width=True, theme="streamlit")
@@ -479,24 +481,25 @@ def create_plotly_statistical_visualizations(data):
     
     # 14. Enhanced Correlation Heatmap (already exists - skip duplicate)
     
-    # 15. Multi-Variable Scatter Matrix (Plotly version)
+    # 15. Health Metrics Correlation Analysis (Simplified for Snowflake)
     with st.container():
-        st.markdown('<div class="viz-title">15. Multi-Variable Health Relationship Explorer</div>', unsafe_allow_html=True)
-        st.markdown('<div class="viz-description">Comprehensive scatter matrix of patient health metrics</div>', unsafe_allow_html=True)
+        st.markdown('<div class="viz-title">15. Health Metrics Correlation Heatmap</div>', unsafe_allow_html=True)
+        st.markdown('<div class="viz-description">Correlation analysis of patient health metrics</div>', unsafe_allow_html=True)
         
-        # Select numeric columns for scatter matrix
+        # Calculate correlation matrix
         numeric_cols = ['age', 'bmi', 'blood_pressure_systolic', 'cholesterol', 'satisfaction_score']
-        sample_data = data['patients'][numeric_cols + ['gender']].sample(500)
+        corr_matrix = data['patients'][numeric_cols].corr()
         
-        fig15 = px.scatter_matrix(
-            sample_data,
-            dimensions=numeric_cols,
-            color='gender',
-            title='Patient Health Metrics Scatter Matrix Analysis',
-            color_discrete_map={'Male': '#1f77b4', 'Female': '#ff7f0e'}
+        fig15 = px.imshow(
+            corr_matrix,
+            text_auto=True,
+            aspect="auto",
+            title='Patient Health Metrics Correlation Matrix',
+            color_continuous_scale='RdBu_r',
+            zmin=-1, zmax=1
         )
-        fig15.update_layout(height=700, width=700)
-        st.plotly_chart(fig15, use_container_width=True, theme="streamlit", config={'renderer': 'svg'})
+        fig15.update_layout(height=500)
+        st.plotly_chart(fig15, use_container_width=True, theme="streamlit")
     
     # 16. Enhanced Box Plot with Statistical Annotations (Plotly version)
     with st.container():
