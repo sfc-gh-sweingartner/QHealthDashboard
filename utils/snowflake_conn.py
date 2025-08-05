@@ -18,13 +18,8 @@ def get_snowflake_connection() -> Optional[Union[snowflake.connector.SnowflakeCo
     try:
         session = get_active_session()
         if session:
-            # Set database and schema context for Snowpark session
-            try:
-                session.sql("USE DATABASE QUANTIUM_HEALTHCARE_DEMO").collect()
-                session.sql("USE SCHEMA QUANTIUM_HEALTHCARE_DEMO").collect()
-                st.success("✅ Connected via Streamlit in Snowflake session")
-            except Exception as e:
-                st.warning(f"Connected but couldn't set database context: {str(e)}")
+            # No need to set database context in Snowflake - use fully qualified names
+            st.success("✅ Connected via Streamlit in Snowflake session")
             return session
     except Exception:
         # If get_active_session fails, continue to local connection
@@ -50,14 +45,14 @@ def get_snowflake_connection() -> Optional[Union[snowflake.connector.SnowflakeCo
         # Create a connection
         conn = snowflake.connector.connect(**conn_params)
         
-        # Set database and schema context
+        # Test connection without setting context (use fully qualified names)
         cursor = conn.cursor()
         try:
-            cursor.execute("USE DATABASE QUANTIUM_HEALTHCARE_DEMO")
-            cursor.execute("USE SCHEMA QUANTIUM_HEALTHCARE_DEMO")
+            cursor.execute("SELECT CURRENT_VERSION()")
+            cursor.fetchone()
             st.success("✅ Connected via local Snowflake config")
         except Exception as e:
-            st.warning(f"Connected but couldn't set database context: {str(e)}")
+            st.warning(f"Connection test failed: {str(e)}")
         finally:
             cursor.close()
         
