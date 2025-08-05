@@ -121,6 +121,9 @@ def main():
         if st.button("💊 Q.Dose", key="dose", help="Pharmaceutical Analytics"):
             st.switch_page("pages/dose.py")
         
+        # Visualisations Gallery
+        if st.button("🎨 Visualisations Gallery", key="visualisations", help="Showcase of Advanced Visualizations"):
+            st.switch_page("pages/visualisations.py")
 
         st.markdown("---")
         
@@ -173,7 +176,39 @@ def main():
         if st.button("Launch Q.Dose →", key="launch_dose"):
             st.switch_page("pages/dose.py")
     
-
+    # Visualisations Gallery Section
+    st.markdown("---")
+    st.markdown("## 🎨 Visualizations Gallery")
+    
+    col1, col2 = st.columns([2, 1])
+    
+    with col1:
+        st.markdown("""
+        <div class="nav-section">
+            <h3>🎨 Advanced Visualization Gallery</h3>
+            <p><strong>Showcase of Streamlit's Visual Power</strong></p>
+            <ul>
+                <li>23+ Professional Visualizations</li>
+                <li>Interactive Plotly, Altair, Seaborn charts</li>
+                <li>3D plots, animations, statistical analysis</li>
+                <li>Competing with Power BI & Tableau</li>
+                <li>Publication-quality aesthetics</li>
+            </ul>
+        </div>
+        """, unsafe_allow_html=True)
+        
+        if st.button("Explore Gallery →", key="launch_gallery"):
+            st.switch_page("pages/visualisations.py")
+    
+    with col2:
+        st.markdown("""
+        <div style="text-align: center; padding: 2rem; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
+                    border-radius: 15px; color: white;">
+            <h2 style="margin: 0; color: white;">23+</h2>
+            <p style="margin: 0.5rem 0; color: #f8f9fa;">Advanced Charts</p>
+            <p style="margin: 0; font-size: 0.9rem; color: #dee2e6;">Interactive • Professional • Beautiful</p>
+        </div>
+        """, unsafe_allow_html=True)
     
     # Platform Overview Metrics
     st.markdown("## 📈 Platform Overview")
