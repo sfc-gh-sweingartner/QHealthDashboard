@@ -64,8 +64,6 @@ st.markdown("""
 
 def initialize_session_state():
     """Initialize session state variables"""
-    if 'page_load_time' not in st.session_state:
-        st.session_state.page_load_time = time.time()
     if 'snowflake_connection' not in st.session_state:
         st.session_state.snowflake_connection = None
     if 'connection_status' not in st.session_state:
@@ -125,18 +123,6 @@ def main():
         if st.button("🎨 Visualisations Gallery", key="visualisations", help="Showcase of Advanced Visualizations"):
             st.switch_page("pages/visualisations.py")
 
-        st.markdown("---")
-        
-        # Performance Monitor
-        st.markdown("### ⚡ Performance")
-        current_time = time.time()
-        load_time = current_time - st.session_state.page_load_time
-        
-        if load_time < 3:
-            st.markdown(f'<span class="performance-badge">🚀 {load_time:.1f}s</span>', unsafe_allow_html=True)
-        else:
-            st.warning(f"⚠️ Load time: {load_time:.1f}s")
-        
         st.markdown("---")
         
         # Cache Management
