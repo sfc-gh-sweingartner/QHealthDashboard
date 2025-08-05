@@ -1,0 +1,343 @@
+-- =====================================================
+-- Quantium Healthcare Analytics Demo Platform
+-- Database Schema Setup
+-- =====================================================
+
+-- Create main database
+CREATE DATABASE IF NOT EXISTS QUANTIUM_HEALTHCARE_DEMO;
+USE DATABASE QUANTIUM_HEALTHCARE_DEMO;
+
+-- Create single schema for all tables
+CREATE SCHEMA IF NOT EXISTS QUANTIUM_HEALTHCARE_DEMO;
+
+-- =====================================================
+-- QUANTIUM_HEALTHCARE_DEMO SCHEMA - All tables
+-- =====================================================
+USE SCHEMA QUANTIUM_HEALTHCARE_DEMO;
+
+-- Geography reference table
+CREATE OR REPLACE TABLE DIM_GEOGRAPHY (
+    GEOGRAPHY_ID INT AUTOINCREMENT PRIMARY KEY,
+    PROVINCE VARCHAR(50),
+    REGION VARCHAR(100),
+    COUNTRY VARCHAR(10) DEFAULT 'ZA',
+    CREATED_DATE TIMESTAMP DEFAULT CURRENT_TIMESTAMP()
+);
+
+-- Provider reference table
+CREATE OR REPLACE TABLE DIM_PROVIDERS (
+    PROVIDER_ID INT AUTOINCREMENT PRIMARY KEY,
+    PROVIDER_NAME VARCHAR(200),
+    PROVIDER_GROUP VARCHAR(100),
+    PROVIDER_CATEGORY VARCHAR(50),
+    PROVIDER_TYPE VARCHAR(50),
+    PROVINCE VARCHAR(50),
+    REGION VARCHAR(100),
+    CREATED_DATE TIMESTAMP DEFAULT CURRENT_TIMESTAMP()
+);
+
+-- Medical schemes reference table
+CREATE OR REPLACE TABLE DIM_MEDICAL_SCHEMES (
+    SCHEME_ID INT AUTOINCREMENT PRIMARY KEY,
+    SCHEME_NAME VARCHAR(200),
+    PLAN_GROUP VARCHAR(100),
+    PLAN_TYPE VARCHAR(50),
+    CREATED_DATE TIMESTAMP DEFAULT CURRENT_TIMESTAMP()
+);
+
+-- Time dimension table
+CREATE OR REPLACE TABLE DIM_TIME (
+    DATE_KEY DATE PRIMARY KEY,
+    YEAR INT,
+    MONTH_NO INT,
+    MONTH_KEY INT,
+    QUARTER INT,
+    DAY_OF_WEEK INT,
+    WEEK_OF_YEAR INT,
+    IS_WEEKEND BOOLEAN
+);
+
+-- =====================================================
+-- CHECKUP_LITE TABLES - Medical products/devices claims
+-- =====================================================
+
+-- Product hierarchy reference table
+CREATE OR REPLACE TABLE DIM_PRODUCTS (
+    NAPPI9 INT PRIMARY KEY,
+    MANUFACTURER VARCHAR(200),
+    HIGH_LEVEL_1 VARCHAR(200),
+    HIGH_LEVEL_2 VARCHAR(200), 
+    HIGH_LEVEL_3 VARCHAR(200),
+    HIGH_LEVEL_4 VARCHAR(200),
+    TR_LEVEL_1 VARCHAR(200),
+    LEVELS_CONCAT_TILL_2 VARCHAR(500),
+    ALL_LEVELS_CONCAT VARCHAR(500),
+    ALL_LEVELS_CONCAT_4 VARCHAR(500),
+    CREATED_DATE TIMESTAMP DEFAULT CURRENT_TIMESTAMP()
+);
+
+-- Main healthcare claims fact table
+CREATE OR REPLACE TABLE HEALTHCARE_CLAIMS (
+    CLAIM_ID INT AUTOINCREMENT PRIMARY KEY,
+    
+    -- Temporal dimensions
+    YEAR INT,
+    MONTH_NO FLOAT,
+    DATE_KEY DATE,
+    
+    -- Product identification  
+    NAPPI9 INT,
+    MANUFACTURER VARCHAR(200),
+    
+    -- Provider information
+    PRACTICE_NO_DESCR VARCHAR(200),
+    CATEGORY_DESCR VARCHAR(100),
+    PROVIDER_GROUP VARCHAR(100),
+    
+    -- Geographic dimensions
+    P_PROVINCE VARCHAR(50),
+    PROVINCE_DESCR VARCHAR(50),
+    
+    -- Product hierarchy (4-level classification)
+    HIGH_LEVEL_1 VARCHAR(200),
+    HIGH_LEVEL_2 VARCHAR(200),
+    HIGH_LEVEL_3 VARCHAR(200), 
+    HIGH_LEVEL_4 VARCHAR(200),
+    
+    -- Simplified product hierarchy
+    TR_LEVEL_1 VARCHAR(200),
+    
+    -- Concatenated classifications
+    LEVELS_CONCAT_TILL_2 VARCHAR(500),
+    ALL_LEVELS_CONCAT VARCHAR(500),
+    ALL_LEVELS_CONCAT_4 VARCHAR(500),
+    
+    -- Financial metrics
+    AMT_CLAIMED_TY FLOAT,
+    AMT_CLAIMED_LY FLOAT,
+    AMT_PAID_TY FLOAT,
+    AMT_PAID_LY FLOAT,
+    
+    -- Volume metrics
+    UNITS_TY FLOAT,
+    UNITS_LY FLOAT,
+    
+    -- Technical fields
+    WF INT,
+    
+    -- Audit fields
+    CREATED_DATE TIMESTAMP DEFAULT CURRENT_TIMESTAMP(),
+    UPDATED_DATE TIMESTAMP DEFAULT CURRENT_TIMESTAMP()
+)
+CLUSTER BY (YEAR, P_PROVINCE, CATEGORY_DESCR);
+
+-- =====================================================
+-- DOSE TABLES - Pharmaceutical prescriptions
+-- =====================================================
+
+-- ATC hierarchy reference table
+CREATE OR REPLACE TABLE DIM_ATC_HIERARCHY (
+    ATC_CODE VARCHAR(20) PRIMARY KEY,
+    ATC_DESCRIPTION VARCHAR(200),
+    ATC_LEVEL_DESC_1 VARCHAR(200),
+    ATC_LEVEL_DESC_2 VARCHAR(200),
+    ATC_LEVEL_DESC_3 VARCHAR(200),
+    ATC_LEVEL_DESC_4 VARCHAR(200),
+    ATC_LEVEL_DESC_5 VARCHAR(200),
+    CREATED_DATE TIMESTAMP DEFAULT CURRENT_TIMESTAMP()
+);
+
+-- Pharmaceutical products reference table
+CREATE OR REPLACE TABLE DIM_PHARMACEUTICALS (
+    NAPPI9 INT PRIMARY KEY,
+    PRODUCT_NAME VARCHAR(300),
+    NAPPI_MANUFACTURER VARCHAR(200),
+    STRENGTH VARCHAR(50),
+    SCHEDULE INT,
+    PACK_SIZE INT,
+    DOSAGE_FORM VARCHAR(20),
+    ATC_CODE VARCHAR(20),
+    CREATED_DATE TIMESTAMP DEFAULT CURRENT_TIMESTAMP()
+);
+
+-- Patient demographics reference table
+CREATE OR REPLACE TABLE DIM_PATIENTS (
+    ENTITY_NO VARCHAR(100) PRIMARY KEY,
+    AGE_BUCKET VARCHAR(50),
+    AGE_GROUPS VARCHAR(50),
+    GENDER VARCHAR(10),
+    PROVINCE VARCHAR(50),
+    REGION_OF_RESIDENCE VARCHAR(100),
+    CREATED_DATE TIMESTAMP DEFAULT CURRENT_TIMESTAMP()
+);
+
+-- Main pharmaceutical claims fact table
+CREATE OR REPLACE TABLE PHARMACEUTICAL_CLAIMS (
+    CLAIM_ID INT AUTOINCREMENT PRIMARY KEY,
+    
+    -- Patient identification (encrypted)
+    ENTITY_NO VARCHAR(100),
+    
+    -- Temporal dimensions
+    DATE_KEY DATE,
+    YEAR INT,
+    MONTH_KEY INT,
+    
+    -- Product identification
+    NAPPI9 INT,
+    PRODUCT_NAME VARCHAR(300),
+    NAPPI_MANUFACTURER VARCHAR(200),
+    
+    -- Patient demographics
+    AGE_BUCKET VARCHAR(50),
+    AGE_GROUPS VARCHAR(50),
+    GENDER VARCHAR(10),
+    
+    -- Geographic dimensions
+    PROVINCE VARCHAR(50),
+    REGION_OF_RESIDENCE VARCHAR(100),
+    
+    -- Medical scheme information
+    PLAN_GRP VARCHAR(100),
+    PLAN_SCHEME VARCHAR(200),
+    DEG_DESCR VARCHAR(200),
+    
+    -- Clinical information
+    IN_OUT_HOSPITAL_IND INT,
+    TREATING_DR VARCHAR(100),
+    
+    -- Product specifications
+    STRENGTH VARCHAR(50),
+    SCHEDULE INT,
+    PACK_SIZE INT,
+    DOSAGE_FORM VARCHAR(20),
+    
+    -- ATC classification system (5-level hierarchy)
+    ATC_DESCRIPTION VARCHAR(200),
+    ATC_LEVEL_DESC_1 VARCHAR(200),
+    ATC_LEVEL_DESC_2 VARCHAR(200),
+    ATC_LEVEL_DESC_3 VARCHAR(200),
+    ATC_LEVEL_DESC_4 VARCHAR(200),
+    ATC_LEVEL_DESC_5 VARCHAR(200),
+    
+    -- Provider information
+    PROVIDER_TYPE VARCHAR(50),
+    PROVIDER_GROUP VARCHAR(100),
+    PROVIDER VARCHAR(200),
+    PROVIDER_REGION VARCHAR(100),
+    PROVIDER_PROVINCE VARCHAR(50),
+    
+    -- Procedure information
+    BUCKET VARCHAR(50),
+    TR_PROCEDURE_CODE_DESCRIPTION VARCHAR(300),
+    
+    -- Financial breakdown (multiple payment sources)
+    AMT_PAID_ATB FLOAT DEFAULT 0,
+    AMT_PAID_CEB FLOAT DEFAULT 0,
+    AMT_PAID_GPN FLOAT DEFAULT 0,
+    AMT_PAID_HCC FLOAT DEFAULT 0,
+    AMT_PAID_HCC_ADMIN FLOAT DEFAULT 0,
+    AMT_PAID_MEM FLOAT DEFAULT 0,
+    AMT_PAID_MOB FLOAT DEFAULT 0,
+    AMT_PAID_MSA FLOAT DEFAULT 0,
+    AMT_PAID_PFR FLOAT DEFAULT 0,
+    AMT_PAID_PMB FLOAT DEFAULT 0,
+    AMT_PAID_PMB_CHRONIC FLOAT DEFAULT 0,
+    AMT_PAID_PROV FLOAT DEFAULT 0,
+    AMT_PAID_TP FLOAT DEFAULT 0,
+    
+    -- Summary financial metrics
+    AMT_PAID FLOAT,
+    AMT_CLAIMED FLOAT,
+    
+    -- Volume metrics
+    QTY FLOAT,
+    CLAIMS INT,
+    
+    -- Audit fields
+    CREATED_DATE TIMESTAMP DEFAULT CURRENT_TIMESTAMP(),
+    UPDATED_DATE TIMESTAMP DEFAULT CURRENT_TIMESTAMP()
+)
+CLUSTER BY (YEAR, PROVINCE, PROVIDER_TYPE);
+
+-- =====================================================
+-- INDEXES AND PERFORMANCE OPTIMIZATION
+-- =====================================================
+
+-- CHECKUP_LITE indexes
+-- Note: Snowflake uses clustering keys instead of traditional indexes
+-- Clustering is defined in table creation above
+
+-- DOSE indexes
+-- Note: Snowflake uses clustering keys instead of traditional indexes
+-- Clustering is defined in table creation above
+
+-- =====================================================
+-- MATERIALIZED VIEWS FOR PERFORMANCE
+-- =====================================================
+
+-- CHECKUP_LITE summary view
+CREATE OR REPLACE VIEW VW_CLAIMS_SUMMARY AS
+SELECT 
+    YEAR,
+    MONTH_NO,
+    P_PROVINCE,
+    CATEGORY_DESCR,
+    TR_LEVEL_1,
+    COUNT(*) AS CLAIM_COUNT,
+    SUM(AMT_CLAIMED_TY) AS TOTAL_CLAIMED_TY,
+    SUM(AMT_PAID_TY) AS TOTAL_PAID_TY,
+    SUM(UNITS_TY) AS TOTAL_UNITS_TY,
+    AVG(AMT_CLAIMED_TY) AS AVG_CLAIMED_TY,
+    AVG(AMT_PAID_TY) AS AVG_PAID_TY
+FROM HEALTHCARE_CLAIMS
+GROUP BY YEAR, MONTH_NO, P_PROVINCE, CATEGORY_DESCR, TR_LEVEL_1;
+
+-- DOSE summary view
+CREATE OR REPLACE VIEW VW_PHARMA_SUMMARY AS
+SELECT 
+    YEAR,
+    MONTH_KEY,
+    PROVINCE,
+    PROVIDER_TYPE,
+    ATC_LEVEL_DESC_1,
+    AGE_GROUPS,
+    GENDER,
+    COUNT(*) AS PRESCRIPTION_COUNT,
+    SUM(AMT_CLAIMED) AS TOTAL_CLAIMED,
+    SUM(AMT_PAID) AS TOTAL_PAID,
+    SUM(QTY) AS TOTAL_QUANTITY,
+    AVG(AMT_CLAIMED) AS AVG_CLAIMED,
+    AVG(AMT_PAID) AS AVG_PAID
+FROM PHARMACEUTICAL_CLAIMS
+GROUP BY YEAR, MONTH_KEY, PROVINCE, PROVIDER_TYPE, ATC_LEVEL_DESC_1, AGE_GROUPS, GENDER;
+
+-- =====================================================
+-- GRANTS AND PERMISSIONS
+-- =====================================================
+
+-- Grant usage on database and schema
+GRANT USAGE ON DATABASE QUANTIUM_HEALTHCARE_DEMO TO ROLE PUBLIC;
+GRANT USAGE ON SCHEMA QUANTIUM_HEALTHCARE_DEMO.QUANTIUM_HEALTHCARE_DEMO TO ROLE PUBLIC;
+
+-- Grant select permissions on all tables and views
+GRANT SELECT ON ALL TABLES IN SCHEMA QUANTIUM_HEALTHCARE_DEMO.QUANTIUM_HEALTHCARE_DEMO TO ROLE PUBLIC;
+GRANT SELECT ON ALL VIEWS IN SCHEMA QUANTIUM_HEALTHCARE_DEMO.QUANTIUM_HEALTHCARE_DEMO TO ROLE PUBLIC;
+
+-- =====================================================
+-- VALIDATION QUERIES
+-- =====================================================
+
+-- Verify schema creation
+SHOW SCHEMAS IN DATABASE QUANTIUM_HEALTHCARE_DEMO;
+
+-- Verify table creation
+SHOW TABLES IN SCHEMA QUANTIUM_HEALTHCARE_DEMO.QUANTIUM_HEALTHCARE_DEMO;
+
+-- Check table structures
+DESCRIBE TABLE QUANTIUM_HEALTHCARE_DEMO.QUANTIUM_HEALTHCARE_DEMO.HEALTHCARE_CLAIMS;
+DESCRIBE TABLE QUANTIUM_HEALTHCARE_DEMO.QUANTIUM_HEALTHCARE_DEMO.PHARMACEUTICAL_CLAIMS;
+
+CREATE STAGE Text2SQL 
+	DIRECTORY = ( ENABLE = true ) 
+	ENCRYPTION = ( TYPE = 'SNOWFLAKE_SSE' );

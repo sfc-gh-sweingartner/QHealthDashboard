@@ -1,0 +1,38 @@
+# Quantium Healthcare Analytics Platform - Dependencies
+# Phase 2: Core Dashboards with AI Integration
+
+# Core Streamlit
+streamlit>=1.28.0
+
+# Data Processing
+pandas>=2.0.0
+numpy>=1.24.0
+
+# Snowflake Integration
+snowflake-connector-python>=3.3.0
+snowflake-sqlalchemy>=1.5.0
+snowflake-snowpark-python>=1.11.0
+tomli>=2.0.0
+
+# Visualization
+plotly>=5.15.0
+altair>=5.0.0
+
+# Data Analysis
+scipy>=1.11.0
+scikit-learn>=1.3.0
+
+# Performance & Caching
+# streamlit has built-in caching with @st.cache_data and @st.cache_resource
+
+# Date/Time Handling
+python-dateutil>=2.8.0
+
+# Development & Testing (Optional)
+pytest>=7.4.0
+black>=23.0.0
+flake8>=6.0.0
+
+# Additional Utilities
+requests>=2.31.0
+python-dotenv>=1.0.0

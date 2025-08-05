@@ -1,0 +1,3051 @@
+name: qhealthdashboard
+description: |
+  This comprehensive healthcare analytics semantic model provides deep insights into South African healthcare delivery, costs, and outcomes across two primary datasets: Q.CheckUp Lite (medical device and product claims) and Q.Dose (pharmaceutical prescriptions). 
+  
+  The model enables analysis of healthcare utilization patterns, cost optimization opportunities, provider performance, patient demographics, treatment pathways, and clinical outcomes. Users can explore questions about:
+  
+  **Financial Analytics**: Healthcare spending trends, claim patterns, cost drivers, payment source analysis, and budget optimization across medical schemes, providers, and geographic regions.
+  
+  **Clinical Insights**: Treatment patterns, medication usage, disease management, therapeutic outcomes, and population health trends across different patient demographics and clinical conditions.
+  
+  **Provider Analytics**: Hospital and pharmacy performance, network utilization, provider efficiency, geographic service delivery patterns, and quality metrics.
+  
+  **Population Health**: Demographic health trends, geographic disease patterns, age-specific treatment needs, gender-based healthcare utilization, and preventive care analysis.
+  
+  **Operational Intelligence**: Supply chain insights, inventory management, demand forecasting, seasonal patterns, and resource allocation optimization.
+  
+  The data covers comprehensive healthcare claims across South Africa's nine provinces, including major medical schemes (Discovery Health, Bonitas, Momentum Health), leading provider networks (Netcare, Life Healthcare, Mediclinic), and extensive pharmaceutical and medical device catalogs with ATC classification hierarchies.
+  
+  All patient data is synthetic and anonymized, ensuring privacy compliance while maintaining realistic healthcare patterns for meaningful analysis and decision-making.
+tables:
+  - name: DIM_ATC_HIERARCHY
+    base_table:
+      database: QUANTIUM_HEALTHCARE_DEMO
+      schema: QUANTIUM_HEALTHCARE_DEMO
+      table: DIM_ATC_HIERARCHY
+    dimensions:
+      - name: ATC_CODE
+        expr: ATC_CODE
+        data_type: VARCHAR(20)
+        sample_values:
+          - L04AB01
+          - L04AA27
+          - L03AX13
+        description: Anatomical Therapeutic Chemical (ATC) classification code, a unique identifier for a specific pharmaceutical substance or group of substances, used to classify medications based on their therapeutic, pharmacological, and chemical properties.
+        synonyms:
+          - anatomical_therapeutic_code
+          - atc_id
+          - therapeutic_code
+          - pharmaceutical_code
+          - classification_code
+          - drug_code
+        cortex_search_service:
+          service: Search_Quail_DIM_ATC_HIERARCHY_ATC_CODE
+      - name: ATC_DESCRIPTION
+        expr: ATC_DESCRIPTION
+        data_type: VARCHAR(200)
+        sample_values:
+          - INTERFERON BETA-1A
+          - FINGOLIMOD
+          - GLATIRAMER ACETATE
+        description: Description of active pharmaceutical ingredients or medications used to treat multiple sclerosis.
+        synonyms:
+          - atc_name
+          - atc_label
+          - atc_text
+          - atc_title
+          - atc_definition
+          - atc_term
+          - atc_descriptor
+        cortex_search_service:
+          service: Search_Quail_DIM_ATC_HIERARCHY_ATC_DESCRIPTION
+      - name: ATC_LEVEL_DESC_1
+        expr: ATC_LEVEL_DESC_1
+        data_type: VARCHAR(200)
+        sample_values:
+          - N - Nervous System
+          - L - Antineoplastic And Immunomodulating Agents
+          - C - Cardiovascular System
+        description: This column describes the first level of the Anatomical Therapeutic Chemical (ATC) classification system, which categorizes active ingredients of drugs according to the organ or system on which they act and their therapeutic, pharmacological and chemical properties.
+        synonyms:
+          - first_level_atc_description
+          - atc_level_one
+          - primary_atc_category
+          - atc_first_level_name
+          - first_atc_level_description
+        cortex_search_service:
+          service: Search_Quail_DIM_ATC_HIERARCHY_ATC_LEVEL_DESC_1
+      - name: ATC_LEVEL_DESC_2
+        expr: ATC_LEVEL_DESC_2
+        data_type: VARCHAR(200)
+        sample_values:
+          - L04 - Immunosuppressants
+          - L03 - Immunostimulants
+          - C09 - Agents Acting On The Renin-Angiotensin System
+        description: Description of the therapeutic or pharmacological subgroup of a medicinal product, as defined by the Anatomical Therapeutic Chemical (ATC) classification system.
+        synonyms:
+          - second_level_atc_description
+          - atc_level_2_name
+          - atc_second_level_category
+          - atc_subcategory_description
+          - atc_second_level_descriptor
+        cortex_search_service:
+          service: Search_Quail_DIM_ATC_HIERARCHY_ATC_LEVEL_DESC_2
+      - name: ATC_LEVEL_DESC_3
+        expr: ATC_LEVEL_DESC_3
+        data_type: VARCHAR(200)
+        sample_values:
+          - L03A - Immunostimulants
+          - R06A - Antihistamines For Systemic Use
+          - L04A - Immunosuppressants
+        description: Description of the anatomical therapeutic chemical (ATC) classification system's third level, which categorizes active ingredients of drugs based on their therapeutic, pharmacological, and chemical properties.
+        synonyms:
+          - third_level_atc_description
+          - atc_level_3_name
+          - atc_third_level_descriptor
+          - atc_3rd_level_description
+          - third_level_atc_category
+        cortex_search_service:
+          service: Search_Quail_DIM_ATC_HIERARCHY_ATC_LEVEL_DESC_3
+      - name: ATC_LEVEL_DESC_4
+        expr: ATC_LEVEL_DESC_4
+        data_type: VARCHAR(200)
+        sample_values:
+          - L04AA - Selective Immunosuppressants
+          - N02AA - Natural Opium Alkaloids
+          - L04AB - Tumor Necrosis Factor Alpha Inhibitors
+        description: Description of the therapeutic subgroup of a pharmaceutical product, as classified by the Anatomical Therapeutic Chemical (ATC) system, at the fourth level of the hierarchy.
+        synonyms:
+          - fourth_level_atc_description
+          - atc_level_4_description
+          - fourth_atc_level_name
+          - atc_description_level_four
+          - level_four_atc_name
+        cortex_search_service:
+          service: Search_Quail_DIM_ATC_HIERARCHY_ATC_LEVEL_DESC_4
+      - name: ATC_LEVEL_DESC_5
+        expr: ATC_LEVEL_DESC_5
+        data_type: VARCHAR(200)
+        sample_values:
+          - L03AX13 - Glatiramer Acetate
+          - N05BA12 - Alprazolam
+          - L04AB01 - Etanercept
+        description: Description of the active ingredient or chemical name of a medication at the fifth level of the Anatomical Therapeutic Chemical (ATC) classification system.
+        synonyms:
+          - fifth_level_atc_description
+          - atc_level_5_description
+          - fifth_atc_level_name
+          - atc_description_level_5
+          - atc_fifth_level_descriptor
+        cortex_search_service:
+          service: Search_Quail_DIM_ATC_HIERARCHY_ATC_LEVEL_DESC_5
+    time_dimensions:
+      - name: CREATED_DATE
+        expr: CREATED_DATE
+        data_type: TIMESTAMP_NTZ(9)
+        sample_values:
+          - 2025-08-03T17:49:19.413+0000
+        description: Date and time when the ATC hierarchy record was created.
+        synonyms:
+          - creation_date
+          - date_created
+          - timestamp
+          - insertion_date
+          - record_date
+          - entry_date
+          - registration_date
+          - date_recorded
+    primary_key:
+      columns:
+        - ATC_CODE
+  - name: DIM_GEOGRAPHY
+    base_table:
+      database: QUANTIUM_HEALTHCARE_DEMO
+      schema: QUANTIUM_HEALTHCARE_DEMO
+      table: DIM_GEOGRAPHY
+    dimensions:
+      - name: PROVINCE
+        expr: PROVINCE
+        data_type: VARCHAR(50)
+        sample_values:
+          - Gauteng
+          - KwaZulu-Natal
+          - Limpopo
+        description: The province in which a location resides, as defined by the nine provinces of South Africa.
+        synonyms:
+          - state
+          - territory
+          - region
+          - administrative_area
+          - prefecture
+          - county
+          - shire
+          - province_name
+          - administrative_division
+        cortex_search_service:
+          service: Search_Quail_DIM_GEOGRAPHY_PROVINCE
+      - name: REGION
+        expr: REGION
+        data_type: VARCHAR(100)
+        sample_values:
+          - Port Elizabeth
+          - Pretoria
+          - Nelspruit
+        description: This column represents the geographic region where a business or activity is located, with possible values being Port Elizabeth, Pretoria, and Nelspruit, which are major cities in South Africa.
+        synonyms:
+          - area
+          - territory
+          - zone
+          - district
+          - province
+          - locality
+          - geographic_area
+          - administrative_division
+          - subdivision
+        cortex_search_service:
+          service: Search_Quail_DIM_GEOGRAPHY_REGION
+      - name: COUNTRY
+        expr: COUNTRY
+        data_type: VARCHAR(10)
+        sample_values:
+          - ZA
+        description: The country in which a transaction or event occurred, represented by its ISO 3166-1 alpha-2 code.
+        synonyms:
+          - nation
+          - land
+          - territory
+          - state
+          - republic
+          - commonwealth
+          - homeland
+        cortex_search_service:
+          service: Search_Quail_DIM_GEOGRAPHY_COUNTRY
+    time_dimensions:
+      - name: CREATED_DATE
+        expr: CREATED_DATE
+        data_type: TIMESTAMP_NTZ(9)
+        sample_values:
+          - 2025-08-03T17:49:15.586+0000
+        description: Date and time when the geography record was created.
+        synonyms:
+          - creation_date
+          - creation_timestamp
+          - date_created
+          - timestamp
+          - insertion_date
+          - record_creation_date
+          - entry_date
+          - registration_date
+    facts:
+      - name: GEOGRAPHY_ID
+        expr: GEOGRAPHY_ID
+        data_type: NUMBER(38,0)
+        sample_values:
+          - '1'
+          - '2'
+          - '3'
+        description: Unique identifier for a geographic location, such as a country, region, or city.
+        synonyms:
+          - location_id
+          - geographic_key
+          - geo_code
+          - territory_id
+          - area_id
+          - region_key
+          - spatial_id
+    primary_key:
+      columns:
+        - GEOGRAPHY_ID
+  - name: DIM_MEDICAL_SCHEMES
+    base_table:
+      database: QUANTIUM_HEALTHCARE_DEMO
+      schema: QUANTIUM_HEALTHCARE_DEMO
+      table: DIM_MEDICAL_SCHEMES
+    dimensions:
+      - name: SCHEME_NAME
+        expr: SCHEME_NAME
+        data_type: VARCHAR(200)
+        sample_values:
+          - Bonitas Medical Fund
+          - Momentum Health
+          - Discovery Health Medical Scheme
+        description: The name of the medical scheme or fund that a patient is registered with.
+        synonyms:
+          - plan_name
+          - insurance_scheme
+          - medical_plan
+          - health_scheme
+          - coverage_name
+          - policy_name
+          - scheme_title
+        cortex_search_service:
+          service: Search_Quail_DIM_MEDICAL_SCHEMES_SCHEME_NAME
+      - name: PLAN_GROUP
+        expr: PLAN_GROUP
+        data_type: VARCHAR(100)
+        sample_values:
+          - Savings
+          - Comprehensive
+          - Priority
+        description: |-
+          This column categorizes medical schemes into three groups based on their coverage and benefits, where:
+
+          * Savings plans are basic plans that provide limited coverage and require members to pay out-of-pocket for most services.
+          * Comprehensive plans offer more extensive coverage, including a wider range of services and higher reimbursement rates.
+          * Priority plans provide the highest level of coverage, with the most comprehensive benefits and lowest out-of-pocket costs.
+        synonyms:
+          - plan_category
+          - coverage_group
+          - insurance_plan_type
+          - benefit_group
+          - plan_classification
+        cortex_search_service:
+          service: Search_Quail_DIM_MEDICAL_SCHEMES_PLAN_GROUP
+      - name: PLAN_TYPE
+        expr: PLAN_TYPE
+        data_type: VARCHAR(50)
+        sample_values:
+          - Executive
+          - Classic
+          - Saver
+        description: The type of medical scheme plan offered, which determines the level of coverage and benefits provided to members, with options including Executive (comprehensive coverage), Classic (standard coverage), and Saver (basic coverage).
+        synonyms:
+          - plan_category
+          - coverage_type
+          - insurance_plan
+          - benefit_plan
+          - policy_type
+          - plan_classification
+        cortex_search_service:
+          service: Search_Quail_DIM_MEDICAL_SCHEMES_PLAN_TYPE
+    time_dimensions:
+      - name: CREATED_DATE
+        expr: CREATED_DATE
+        data_type: TIMESTAMP_NTZ(9)
+        sample_values:
+          - 2025-08-03T17:49:16.557+0000
+        description: Date and time when the medical scheme was created.
+        synonyms:
+          - creation_date
+          - creation_timestamp
+          - date_created
+          - timestamp
+          - insertion_date
+          - entry_date
+          - record_date
+          - registration_date
+    facts:
+      - name: SCHEME_ID
+        expr: SCHEME_ID
+        data_type: NUMBER(38,0)
+        sample_values:
+          - '1'
+          - '2'
+          - '3'
+        description: Unique identifier for a medical scheme, used to distinguish between different medical aid plans or insurance programs offered by healthcare providers.
+        synonyms:
+          - scheme_number
+          - medical_scheme_identifier
+          - plan_id
+          - program_number
+          - medical_plan_key
+    primary_key:
+      columns:
+        - SCHEME_ID
+  - name: DIM_PATIENTS
+    base_table:
+      database: QUANTIUM_HEALTHCARE_DEMO
+      schema: QUANTIUM_HEALTHCARE_DEMO
+      table: DIM_PATIENTS
+    dimensions:
+      - name: ENTITY_NO
+        expr: ENTITY_NO
+        data_type: VARCHAR(100)
+        sample_values:
+          - PAT_00000178_9dfad8951cc06299d64d
+          - PAT_00000002_51887def8b0aa92d20e6
+          - PAT_00000046_88709ba1fddc480c2f3d
+        description: Unique identifier for a patient entity.
+        synonyms:
+          - patient_id
+          - entity_number
+          - patient_identifier
+          - unique_patient_id
+          - patient_key
+          - individual_id
+        cortex_search_service:
+          service: Search_Quail_DIM_PATIENTS_ENTITY_NO
+      - name: AGE_BUCKET
+        expr: AGE_BUCKET
+        data_type: VARCHAR(50)
+        sample_values:
+          - Under 18 Yrs
+          - Above 80 Yrs
+          - Above 18 Yrs
+        description: 'The age range of the patient, categorized into three groups: those under 18 years old, those above 18 years old, and those above 80 years old.'
+        synonyms:
+          - age_group
+          - age_range
+          - age_category
+          - age_bracket
+          - age_segment
+        cortex_search_service:
+          service: Search_Quail_DIM_PATIENTS_AGE_BUCKET
+      - name: AGE_GROUPS
+        expr: AGE_GROUPS
+        data_type: VARCHAR(50)
+        sample_values:
+          - Under 18
+          - Between 50-65
+          - Between 35-50
+        description: Categorization of patients based on their age, grouping them into distinct ranges to facilitate analysis and reporting by age demographics.
+        synonyms:
+          - age_ranges
+          - age_brackets
+          - age_categories
+          - demographic_groups
+          - age_classifications
+          - age_segments
+        cortex_search_service:
+          service: Search_Quail_DIM_PATIENTS_AGE_GROUPS
+      - name: GENDER
+        expr: GENDER
+        data_type: VARCHAR(10)
+        sample_values:
+          - F
+          - M
+        description: The gender of the patient, either Female (F) or Male (M).
+        synonyms:
+          - sex
+          - male_female
+          - demographic
+          - biological_sex
+          - gender_identity
+        cortex_search_service:
+          service: Search_Quail_DIM_PATIENTS_GENDER
+      - name: PROVINCE
+        expr: PROVINCE
+        data_type: VARCHAR(50)
+        sample_values:
+          - GAUTENG
+          - NORTHERN CAPE
+          - NORTH WEST
+        description: The province where the patient resides.
+        synonyms:
+          - state
+          - territory
+          - region
+          - administrative_division
+          - geographic_area
+          - county
+          - prefecture
+          - governorate
+      - name: REGION_OF_RESIDENCE
+        expr: REGION_OF_RESIDENCE
+        data_type: VARCHAR(100)
+        sample_values:
+          - JOHANNESBURG
+          - CAPE TOWN
+          - PAARL
+        description: The geographic region where the patient resides, categorized into major metropolitan areas.
+        synonyms:
+          - residence_region
+          - geographic_area
+          - area_of_residence
+          - place_of_residence
+          - residential_area
+          - domicile_region
+          - home_region
+          - residential_location
+        cortex_search_service:
+          service: Search_Quail_DIM_PATIENTS_REGION_OF_RESIDENCE
+    time_dimensions:
+      - name: CREATED_DATE
+        expr: CREATED_DATE
+        data_type: TIMESTAMP_NTZ(9)
+        sample_values:
+          - 2025-08-03T23:58:18.081+0000
+        description: Date and time when the patient record was created in the system.
+        synonyms:
+          - created_timestamp
+          - creation_date
+          - date_created
+          - timestamp
+          - insertion_date
+          - record_creation_date
+          - entry_date
+          - date_recorded
+    primary_key:
+      columns:
+        - ENTITY_NO
+  - name: DIM_PHARMACEUTICALS
+    base_table:
+      database: QUANTIUM_HEALTHCARE_DEMO
+      schema: QUANTIUM_HEALTHCARE_DEMO
+      table: DIM_PHARMACEUTICALS
+    dimensions:
+      - name: PRODUCT_NAME
+        expr: PRODUCT_NAME
+        data_type: VARCHAR(300)
+        sample_values:
+          - Tuvigin
+          - Copaxone pre-filled syringe 1ml
+          - Gilenya
+        description: The name of the pharmaceutical product.
+        synonyms:
+          - product_title
+          - item_name
+          - pharmaceutical_name
+          - drug_name
+          - medication_name
+          - product_description
+          - item_description
+        cortex_search_service:
+          service: Search_Quail_DIM_PHARMACEUTICALS_PRODUCT_NAME
+      - name: NAPPI_MANUFACTURER
+        expr: NAPPI_MANUFACTURER
+        data_type: VARCHAR(200)
+        sample_values:
+          - Sandoz SA (PTY) LTD
+          - Teva Pharmaceuticals
+          - Novartis
+        description: The name of the manufacturer of the pharmaceutical product, as assigned by the National Pharmaceutical Pricing Authority (NAPPI).
+        synonyms:
+          - pharmaceutical_company
+          - drug_maker
+          - medication_manufacturer
+          - pharmaceutical_supplier
+          - medicine_producer
+          - manufacturer_name
+        cortex_search_service:
+          service: Search_Quail_DIM_PHARMACEUTICALS_NAPPI_MANUFACTURER
+      - name: STRENGTH
+        expr: STRENGTH
+        data_type: VARCHAR(50)
+        sample_values:
+          - 0.5 - MG
+          - 20 - MG/1ML
+          - 40 - MG/1ML
+        description: The strength of a pharmaceutical product, representing the amount of active ingredient per unit of measurement, such as milligrams (MG) or milligrams per milliliter (MG/1ML).
+        synonyms:
+          - potency
+          - concentration
+          - dosage
+          - power
+          - intensity
+          - magnitude
+        cortex_search_service:
+          service: Search_Quail_DIM_PHARMACEUTICALS_STRENGTH
+      - name: DOSAGE_FORM
+        expr: DOSAGE_FORM
+        data_type: VARCHAR(20)
+        sample_values:
+          - TAB
+          - CAP
+          - INJ
+        description: The form in which the pharmaceutical product is administered, such as a tablet, capsule, or injection.
+        synonyms:
+          - dosage_type
+          - formulation
+          - medication_form
+          - pharmaceutical_form
+          - preparation_type
+          - route_of_administration
+        cortex_search_service:
+          service: Search_Quail_DIM_PHARMACEUTICALS_DOSAGE_FORM
+      - name: ATC_CODE
+        expr: ATC_CODE
+        data_type: VARCHAR(20)
+        sample_values:
+          - L04AA27
+          - C09AA02
+          - L03AX13
+        description: ATC (Anatomical Therapeutic Chemical) code, a unique identifier for a pharmaceutical product based on its active ingredient, therapeutic use, and chemical composition.
+        synonyms:
+          - anatomical_therapeutic_chemical_code
+          - atc_classification
+          - therapeutic_code
+          - pharmaceutical_code
+          - classification_code
+    time_dimensions:
+      - name: CREATED_DATE
+        expr: CREATED_DATE
+        data_type: TIMESTAMP_NTZ(9)
+        sample_values:
+          - 2025-08-03T17:49:19.862+0000
+        description: Date and time when the pharmaceutical record was created in the system.
+        synonyms:
+          - created_timestamp
+          - creation_date
+          - date_created
+          - timestamp
+          - insertion_date
+          - entry_date
+          - record_date
+          - registration_date
+    facts:
+      - name: NAPPI9
+        expr: NAPPI9
+        data_type: NUMBER(38,0)
+        sample_values:
+          - '720446001'
+          - '708286001'
+          - '720446002'
+        description: Unique identifier for a pharmaceutical product, as assigned by the National Pharmaceutical Product Interface (NAPPI) system.
+        synonyms:
+          - national_drug_code
+          - pharmaceutical_id
+          - medication_id
+          - rx_code
+          - national_pharmaceutical_identifier
+      - name: SCHEDULE
+        expr: SCHEDULE
+        data_type: NUMBER(38,0)
+        sample_values:
+          - '4'
+          - '6'
+          - '5'
+        description: |-
+          The schedule classification of a pharmaceutical, which indicates the level of control and regulation placed on the medication, with the following values:
+          - 4: Low potential for abuse and low risk of dependence
+          - 5: Lower potential for abuse than Schedule 4 and consists of preparations containing limited quantities of certain narcotics
+          - 6: Not a standard DEA schedule classification, may be used to indicate a non-controlled or exempt substance
+        synonyms:
+          - classification
+          - category
+          - ranking
+          - grade
+          - rating
+          - tier
+          - level
+          - grouping
+          - designation
+      - name: PACK_SIZE
+        expr: PACK_SIZE
+        data_type: NUMBER(38,0)
+        sample_values:
+          - '12'
+          - '30'
+          - '28'
+        description: The quantity of a pharmaceutical product contained in a single package or unit of sale.
+        synonyms:
+          - package_quantity
+          - quantity_per_package
+          - package_volume
+          - unit_count
+          - container_size
+          - serving_size
+          - dosage_quantity
+    primary_key:
+      columns:
+        - NAPPI9
+  - name: DIM_PRODUCTS
+    base_table:
+      database: QUANTIUM_HEALTHCARE_DEMO
+      schema: QUANTIUM_HEALTHCARE_DEMO
+      table: DIM_PRODUCTS
+    dimensions:
+      - name: MANUFACTURER
+        expr: MANUFACTURER
+        data_type: VARCHAR(200)
+        sample_values:
+          - Ethicon
+          - Smith & Nephew
+          - ConvaTec
+        description: The manufacturer of the product.
+        synonyms:
+          - maker
+          - producer
+          - supplier
+          - creator
+          - builder
+          - vendor
+          - brand
+          - originator
+          - developer
+        cortex_search_service:
+          service: Search_Quail_DIM_PRODUCTS_MANUFACTURER
+      - name: HIGH_LEVEL_1
+        expr: HIGH_LEVEL_1
+        data_type: VARCHAR(200)
+        sample_values:
+          - 'Syr: Syringes'
+          - 'Diag: Diagnostics'
+          - 'WouM: Wound Management'
+        description: High-level categorization of products, indicating the main product family or category.
+        synonyms:
+          - top_level_category
+          - primary_category
+          - main_group
+          - first_level_classification
+          - highest_level_description
+        cortex_search_service:
+          service: Search_Quail_DIM_PRODUCTS_HIGH_LEVEL_1
+      - name: HIGH_LEVEL_2
+        expr: HIGH_LEVEL_2
+        data_type: VARCHAR(200)
+        sample_values:
+          - 'WouM-HydD: Hydrocolloid Dressing'
+          - 'WouM-SynD: Synthetic Dressing'
+          - 'WouM-FoaD: Foam Dressing'
+        description: High-level categorization of wound management dressings, indicating the type of dressing used to manage wounds.
+        synonyms:
+          - category_level_2
+          - secondary_category
+          - second_level_classification
+          - mid_level_group
+          - intermediate_category
+          - level_2_descriptor
+        cortex_search_service:
+          service: Search_Quail_DIM_PRODUCTS_HIGH_LEVEL_2
+      - name: HIGH_LEVEL_3
+        expr: HIGH_LEVEL_3
+        data_type: VARCHAR(200)
+        sample_values:
+          - 'WouM-SynD-SiliD: Silicone Dressing'
+          - 'WouM-FoaD-PolyF: Polyurethane Foam'
+          - 'WouM-HydD-AdhH: Adhesive Hydrocolloid'
+        description: High-level categorization of wound management products, specifically identifying the type of dressing.
+        synonyms:
+          - category_level_3
+          - product_category_3
+          - third_level_classification
+          - high_level_category_3
+          - product_group_3
+          - tier_3_description
+        cortex_search_service:
+          service: Search_Quail_DIM_PRODUCTS_HIGH_LEVEL_3
+      - name: HIGH_LEVEL_4
+        expr: HIGH_LEVEL_4
+        data_type: VARCHAR(200)
+        sample_values:
+          - 'WouM-SynD-SiliD-SiliD: Silicone Dressing'
+          - 'WouM-FoaD-PolyF-AbsF: Absorbent Foam'
+          - 'WouM-HydD-AdhH-SteH: Sterile Hydrocolloid'
+        description: This column represents the fourth level of categorization for wound management products, providing a detailed classification of the product type, such as the type of dressing or material used.
+        synonyms:
+          - fourth_level_category
+          - high_level_category_4
+          - category_level_four
+          - fourth_tier_category
+          - level_four_descriptor
+        cortex_search_service:
+          service: Search_Quail_DIM_PRODUCTS_HIGH_LEVEL_4
+      - name: TR_LEVEL_1
+        expr: TR_LEVEL_1
+        data_type: VARCHAR(200)
+        sample_values:
+          - Syringes
+          - Wound Management
+          - Sutures
+        description: Top-level categorization of medical products, representing the highest level of grouping for product classification.
+        synonyms:
+          - tier_1
+          - first_level
+          - primary_category
+          - top_level
+          - main_group
+          - first_tier
+          - category_1
+          - level_one
+        cortex_search_service:
+          service: Search_Quail_DIM_PRODUCTS_TR_LEVEL_1
+      - name: LEVELS_CONCAT_TILL_2
+        expr: LEVELS_CONCAT_TILL_2
+        data_type: VARCHAR(500)
+        sample_values:
+          - Wound Management | Synthetic Dressing
+          - Sutures | Absorbable Sutures
+          - Wound Management | Foam Dressing
+        description: This column represents a hierarchical categorization of products, concatenating up to two levels of product categories, providing a more detailed and specific classification of products within the wound management and sutures categories.
+        synonyms:
+          - concatenated_levels_up_to_2
+          - combined_levels_2
+          - aggregated_levels_2
+          - merged_levels_2
+          - levels_combined_up_to_2
+          - concatenated_hierarchy_2
+          - combined_category_2
+          - aggregated_category_2
+        cortex_search_service:
+          service: Search_Quail_DIM_PRODUCTS_LEVELS_CONCAT_TILL_2
+      - name: ALL_LEVELS_CONCAT
+        expr: ALL_LEVELS_CONCAT
+        data_type: VARCHAR(500)
+        sample_values:
+          - Wound Management | Synthetic Dressing | Silicone Dressing
+          - Wound Management | Hydrocolloid Dressing | Adhesive Hydrocolloid
+          - Wound Management | Foam Dressing | Polyurethane Foam
+        description: This column represents a hierarchical categorization of products, concatenating all levels of a product's category tree, from highest to lowest level, using a pipe ("|") delimiter.
+        synonyms:
+          - all_levels_combined
+          - all_categories_concatenated
+          - concatenated_levels
+          - combined_level_values
+          - all_level_hierarchy
+          - full_level_description
+        cortex_search_service:
+          service: Search_Quail_DIM_PRODUCTS_ALL_LEVELS_CONCAT
+      - name: ALL_LEVELS_CONCAT_4
+        expr: ALL_LEVELS_CONCAT_4
+        data_type: VARCHAR(500)
+        sample_values:
+          - Wound Management | Synthetic Dressing | Silicone Dressing | Silicone Dressing
+          - Wound Management | Foam Dressing | Polyurethane Foam | Absorbent Foam
+          - Sutures | Absorbable Sutures | PGLA Sutures | Vicryl Sutures
+        description: This column contains a concatenated string of product categories and subcategories, representing a hierarchical structure of product levels, from most general to most specific, separated by pipes (|).
+        synonyms:
+          - all_levels_combined_4
+          - all_categories_concatenated_4
+          - concatenated_all_levels_4
+          - combined_levels_4
+          - all_hierarchy_levels_4
+        cortex_search_service:
+          service: Search_Quail_DIM_PRODUCTS_ALL_LEVELS_CONCAT_4
+    time_dimensions:
+      - name: CREATED_DATE
+        expr: CREATED_DATE
+        data_type: TIMESTAMP_NTZ(9)
+        sample_values:
+          - 2025-08-03T17:49:18.659+0000
+        description: Date and time when the product was created in the system.
+        synonyms:
+          - creation_date
+          - creation_timestamp
+          - date_created
+          - timestamp
+          - insertion_date
+          - insertion_timestamp
+          - record_creation_date
+          - record_creation_timestamp
+          - entry_date
+          - entry_timestamp
+    facts:
+      - name: NAPPI9
+        expr: NAPPI9
+        data_type: NUMBER(38,0)
+        sample_values:
+          - '227044002'
+          - '227044003'
+          - '227044001'
+        description: Product Identifier
+        synonyms:
+          - product_id
+          - product_key
+          - nappi_code
+          - product_identifier
+          - item_number
+          - product_reference
+    primary_key:
+      columns:
+        - NAPPI9
+  - name: DIM_PROVIDERS
+    base_table:
+      database: QUANTIUM_HEALTHCARE_DEMO
+      schema: QUANTIUM_HEALTHCARE_DEMO
+      table: DIM_PROVIDERS
+    dimensions:
+      - name: PROVIDER_NAME
+        expr: PROVIDER_NAME
+        data_type: VARCHAR(200)
+        sample_values:
+          - Life Groenkloof Hospital
+          - Life Vincent Pallotti Hospital
+          - Life Fourways Hospital
+        description: The name of the healthcare provider, representing the specific hospital or medical facility.
+        synonyms:
+          - provider_title
+          - supplier_name
+          - vendor_name
+          - organization_name
+          - company_name
+          - healthcare_provider
+          - medical_provider
+          - facility_name
+        cortex_search_service:
+          service: Search_Quail_DIM_PROVIDERS_PROVIDER_NAME
+      - name: PROVIDER_GROUP
+        expr: PROVIDER_GROUP
+        data_type: VARCHAR(100)
+        sample_values:
+          - Mediclinic
+          - Life Healthcare
+          - Netcare
+        description: The PROVIDER_GROUP dimension categorizes healthcare providers into distinct groups, representing the parent company or conglomerate that owns and operates a network of hospitals, clinics, or other healthcare facilities, such as Mediclinic, Life Healthcare, and Netcare.
+        synonyms:
+          - provider_category
+          - provider_type
+          - provider_classification
+          - provider_segment
+          - provider_cluster
+          - provider_class
+        cortex_search_service:
+          service: Search_Quail_DIM_PROVIDERS_PROVIDER_GROUP
+      - name: PROVIDER_CATEGORY
+        expr: PROVIDER_CATEGORY
+        data_type: VARCHAR(50)
+        sample_values:
+          - Hospitals
+          - Pharmacy
+          - Cardiologist
+        description: The type of healthcare provider, such as a hospital, pharmacy, or specialist like a cardiologist, that delivered the care or service.
+        synonyms:
+          - provider_type_classification
+          - provider_grouping
+          - provider_class
+          - service_category
+          - provider_specialty
+          - care_category
+          - provider_discipline
+        cortex_search_service:
+          service: Search_Quail_DIM_PROVIDERS_PROVIDER_CATEGORY
+      - name: PROVIDER_TYPE
+        expr: PROVIDER_TYPE
+        data_type: VARCHAR(50)
+        sample_values:
+          - Pharmacy
+          - Hospital
+          - Specialist
+        description: The type of healthcare provider, such as a pharmacy, hospital, or specialist, that delivered the care or service.
+        synonyms:
+          - provider_category
+          - provider_classification
+          - provider_kind
+          - provider_label
+          - provider_designation
+          - provider_description
+        cortex_search_service:
+          service: Search_Quail_DIM_PROVIDERS_PROVIDER_TYPE
+      - name: PROVINCE
+        expr: PROVINCE
+        data_type: VARCHAR(50)
+        sample_values:
+          - Gauteng
+          - KwaZulu-Natal
+          - Western Cape
+        description: The province in which the provider is located.
+        synonyms:
+          - state
+          - territory
+          - region
+          - area
+          - administrative_division
+          - geographic_area
+          - jurisdiction
+      - name: REGION
+        expr: REGION
+        data_type: VARCHAR(100)
+        sample_values:
+          - Port Elizabeth
+          - Pretoria
+          - Cape Town
+        description: Geographic region where the provider is located.
+        synonyms:
+          - area
+          - zone
+          - territory
+          - district
+          - province
+          - location
+          - geographic_area
+          - administrative_division
+          - jurisdiction
+    time_dimensions:
+      - name: CREATED_DATE
+        expr: CREATED_DATE
+        data_type: TIMESTAMP_NTZ(9)
+        sample_values:
+          - 2025-08-03T17:49:17.218+0000
+        description: Date and time when the provider record was created.
+        synonyms:
+          - created_timestamp
+          - creation_date
+          - date_created
+          - timestamp
+          - insertion_date
+          - entry_date
+          - record_date
+          - registration_date
+    facts:
+      - name: PROVIDER_ID
+        expr: PROVIDER_ID
+        data_type: NUMBER(38,0)
+        sample_values:
+          - '1'
+          - '2'
+          - '3'
+        description: Unique identifier for a healthcare provider.
+        synonyms:
+          - provider_key
+          - supplier_id
+          - vendor_number
+          - service_provider_id
+          - healthcare_provider_id
+          - organization_id
+    primary_key:
+      columns:
+        - PROVIDER_ID
+  - name: DIM_TIME
+    base_table:
+      database: QUANTIUM_HEALTHCARE_DEMO
+      schema: QUANTIUM_HEALTHCARE_DEMO
+      table: DIM_TIME
+    dimensions:
+      - name: IS_WEEKEND
+        expr: IS_WEEKEND
+        data_type: BOOLEAN
+        sample_values:
+          - 'FALSE'
+          - 'TRUE'
+        description: Indicates whether a date falls on a weekend (Saturday or Sunday) or a weekday.
+        synonyms:
+          - is_saturday_or_sunday
+          - weekend_flag
+          - is_non_weekday
+          - is_saturday
+          - is_sunday
+          - non_business_day
+          - weekend_day
+          - is_off_day
+    time_dimensions:
+      - name: DATE_KEY
+        expr: DATE_KEY
+        data_type: DATE
+        sample_values:
+          - '2017-01-02'
+          - '2017-08-18'
+          - '2017-08-24'
+        description: Unique identifier for a specific date, used to join with fact tables and filter data by date.
+        synonyms:
+          - date_id
+          - calendar_date
+          - date_dimension_key
+          - calendar_key
+          - date_code
+          - date_identifier
+    facts:
+      - name: YEAR
+        expr: YEAR
+        data_type: NUMBER(38,0)
+        sample_values:
+          - '2017'
+          - '2019'
+          - '2018'
+        description: The calendar year in which a transaction or event occurred.
+        synonyms:
+          - calendar_year
+          - fiscal_year
+          - annual_period
+          - yearly_period
+          - twelve_month_period
+      - name: MONTH_NO
+        expr: MONTH_NO
+        data_type: NUMBER(38,0)
+        sample_values:
+          - '1'
+          - '2'
+          - '3'
+        description: Unique identifier for each month of the year, ranging from 1 (January) to 12 (December).
+        synonyms:
+          - month_number
+          - month_id
+          - month_index
+          - month_code
+          - calendar_month
+          - month_value
+      - name: MONTH_KEY
+        expr: MONTH_KEY
+        data_type: NUMBER(38,0)
+        sample_values:
+          - '202206'
+          - '201703'
+          - '201701'
+        description: Unique identifier for a month, represented as a six-digit number in the format YYYYMM, where YYYY is the four-digit year and MM is the two-digit month.
+        synonyms:
+          - month_number
+          - month_id
+          - month_code
+          - calendar_month
+          - month_identifier
+      - name: QUARTER
+        expr: QUARTER
+        data_type: NUMBER(38,0)
+        sample_values:
+          - '1'
+          - '2'
+          - '3'
+        description: The quarter of the year in which a specific date falls, with 1 representing January to March, 2 representing April to June, 3 representing July to September, and 4 (not listed) representing October to December.
+        synonyms:
+          - quarterly_period
+          - financial_quarter
+          - qtr
+          - quarterly_term
+          - fiscal_quarter
+      - name: DAY_OF_WEEK
+        expr: DAY_OF_WEEK
+        data_type: NUMBER(38,0)
+        sample_values:
+          - '1'
+          - '2'
+          - '0'
+        description: The day of the week, where 0 represents Sunday, 1 represents Monday, and 2 represents Tuesday, and so on, with 6 representing Saturday.
+        synonyms:
+          - day_of_week_number
+          - weekday
+          - day_of_week_id
+          - day_number
+          - weekday_number
+          - day_index
+      - name: WEEK_OF_YEAR
+        expr: WEEK_OF_YEAR
+        data_type: NUMBER(38,0)
+        sample_values:
+          - '29'
+          - '1'
+          - '2'
+        description: The week of the year, ranging from 1 to 52 or 53, depending on the year, indicating the week number in which a specific date falls.
+        synonyms:
+          - week_number
+          - yearly_week
+          - calendar_week
+          - week_of_calendar
+          - yearly_week_number
+    primary_key:
+      columns:
+        - DATE_KEY
+  - name: HEALTHCARE_CLAIMS
+    base_table:
+      database: QUANTIUM_HEALTHCARE_DEMO
+      schema: QUANTIUM_HEALTHCARE_DEMO
+      table: HEALTHCARE_CLAIMS
+    dimensions:
+      - name: MANUFACTURER
+        expr: MANUFACTURER
+        data_type: VARCHAR(200)
+        sample_values:
+          - Terumo
+          - ConvaTec
+          - BD Medical
+        description: The name of the medical device or pharmaceutical manufacturer associated with the healthcare claim.
+        synonyms:
+          - maker
+          - producer
+          - supplier
+          - creator
+          - builder
+          - vendor
+          - brand
+          - company
+          - originator
+          - developer
+      - name: PRACTICE_NO_DESCR
+        expr: PRACTICE_NO_DESCR
+        data_type: VARCHAR(200)
+        sample_values:
+          - Clicks Pharmacy Durban
+          - Mediclinic Cape Town
+          - Clicks Pharmacy Sandton
+        description: Description of the healthcare facility or practice where the claim was submitted from, including pharmacies and hospitals.
+        synonyms:
+          - practice_number_description
+          - practice_id_description
+          - practice_identifier
+          - medical_practice_number
+          - healthcare_practice_description
+        cortex_search_service:
+          service: Search_Quail_HEALTHCARE_CLAIMS_PRACTICE_NO_DESCR
+      - name: CATEGORY_DESCR
+        expr: CATEGORY_DESCR
+        data_type: VARCHAR(100)
+        sample_values:
+          - Neurologist
+          - Hospitals
+          - General Practitioner
+        description: The type of healthcare provider or facility that submitted the claim.
+        synonyms:
+          - category_name
+          - category_type
+          - claim_category
+          - description_category
+          - category_label
+        cortex_search_service:
+          service: Search_Quail_HEALTHCARE_CLAIMS_CATEGORY_DESCR
+      - name: PROVIDER_GROUP
+        expr: PROVIDER_GROUP
+        data_type: VARCHAR(100)
+        sample_values:
+          - Dis-Chem
+          - Pick n Pay
+          - Netcare
+        description: The name of the provider group that submitted the healthcare claim, indicating the specific pharmacy or medical group that rendered the service.
+        synonyms:
+          - healthcare_provider
+          - medical_group
+          - provider_name
+          - healthcare_organization
+          - medical_practice
+          - provider_entity
+          - healthcare_facility
+          - medical_institution
+      - name: P_PROVINCE
+        expr: P_PROVINCE
+        data_type: VARCHAR(50)
+        sample_values:
+          - Eastern Cape
+          - KwaZulu-Natal
+          - Gauteng
+        description: Province where the healthcare claim was submitted, representing the geographical region within South Africa where the medical service was provided.
+        synonyms:
+          - province_code
+          - province_id
+          - region_code
+          - geographic_area
+          - administrative_division
+          - territorial_unit
+        cortex_search_service:
+          service: Search_Quail_HEALTHCARE_CLAIMS_P_PROVINCE
+      - name: PROVINCE_DESCR
+        expr: PROVINCE_DESCR
+        data_type: VARCHAR(50)
+        sample_values:
+          - KwaZulu-Natal
+          - Eastern Cape
+          - Gauteng
+        description: The province in which the healthcare claim was made.
+        synonyms:
+          - province_name
+          - region_description
+          - geographic_area
+          - administrative_division
+          - territorial_description
+          - state_name
+          - regional_description
+        cortex_search_service:
+          service: Search_Quail_HEALTHCARE_CLAIMS_PROVINCE_DESCR
+      - name: HIGH_LEVEL_1
+        expr: HIGH_LEVEL_1
+        data_type: VARCHAR(200)
+        sample_values:
+          - 'WouM: Wound Management'
+          - 'Diag: Diagnostics'
+          - 'Syr: Syringes'
+        description: High-level categorization of healthcare claims, indicating the primary type of medical service or product provided, such as wound management, diagnostic testing, or syringe administration.
+        synonyms:
+          - top_level_category
+          - primary_category
+          - main_group
+          - first_level_descriptor
+          - high_level_descriptor
+          - primary_descriptor
+      - name: HIGH_LEVEL_2
+        expr: HIGH_LEVEL_2
+        data_type: VARCHAR(200)
+        sample_values:
+          - 'Diag-RapidT: Rapid Testing'
+          - 'Syr-DisSyr: Disposable Syringes'
+          - 'WouM-SynD: Synthetic Dressing'
+        description: High-level categorization of medical supplies or services, providing a broad grouping of related products or treatments.
+        synonyms:
+          - mid_level_category
+          - secondary_category
+          - second_level_descriptor
+          - intermediate_group
+          - middle_level_classification
+      - name: HIGH_LEVEL_3
+        expr: HIGH_LEVEL_3
+        data_type: VARCHAR(200)
+        sample_values:
+          - 'Sut-Abs-PglaS: PGLA Sutures'
+          - 'Syr-DisSyr-PlasS: Plastic Syringes'
+          - 'Sut-NonA-SilkS: Silk Sutures'
+        description: High-level categorization of medical supplies, grouping similar products together for analysis and reporting purposes.
+        synonyms:
+          - third_level_category
+          - high_level_three
+          - category_level_three
+          - tertiary_category
+          - third_tier_description
+      - name: HIGH_LEVEL_4
+        expr: HIGH_LEVEL_4
+        data_type: VARCHAR(200)
+        sample_values:
+          - 'WouM-FoaD-PolyF-AbsF: Absorbent Foam'
+          - 'SurgI-ElecI-MonoE-PencE: Electrocautery Pencil'
+          - 'Sut-Abs-MonoS-PdsS: PDS Sutures'
+        description: High-level categorization of medical supplies or equipment used in a healthcare claim, such as wound care products, surgical instruments, or sutures.
+        synonyms:
+          - fourth_level_category
+          - high_level_category_4
+          - category_level_four
+          - fourth_tier_category
+          - level_four_description
+      - name: TR_LEVEL_1
+        expr: TR_LEVEL_1
+        data_type: VARCHAR(200)
+        sample_values:
+          - Diagnostics
+          - Syringes
+          - Surgical Instruments
+        description: The level 1 categorization of the type of medical product or service associated with a healthcare claim, such as medical equipment, supplies, or procedures.
+        synonyms:
+          - treatment_level_1
+          - therapy_level_1
+          - tier_1
+          - first_level_treatment
+          - primary_treatment_level
+          - initial_therapy_level
+      - name: LEVELS_CONCAT_TILL_2
+        expr: LEVELS_CONCAT_TILL_2
+        data_type: VARCHAR(500)
+        sample_values:
+          - Surgical Instruments | Electrocautery
+          - Orthopedics | Fixation Devices
+          - Diagnostics | Blood Testing
+        description: This column represents the concatenated hierarchy of medical product categories and subcategories, up to two levels, for healthcare claims.
+        synonyms:
+          - concatenated_levels_2
+          - combined_levels_2
+          - merged_levels_2
+          - aggregated_levels_2
+          - levels_combined_up_to_2
+      - name: ALL_LEVELS_CONCAT
+        expr: ALL_LEVELS_CONCAT
+        data_type: VARCHAR(500)
+        sample_values:
+          - Syringes | Pre-filled Syringes | Glass Syringes
+          - Syringes | Disposable Syringes | Plastic Syringes
+          - Diagnostics | Rapid Testing | Antigen Testing
+        description: This column represents a hierarchical categorization of healthcare claims, with each value being a concatenated string of three levels of product or service categories, providing a detailed classification of the claim type.
+        synonyms:
+          - all_levels_combined
+          - all_hierarchy_levels
+          - concatenated_levels
+          - full_level_description
+          - all_level_names
+          - combined_level_values
+          - hierarchical_level_concatenation
+          - level_concat_all
+      - name: ALL_LEVELS_CONCAT_4
+        expr: ALL_LEVELS_CONCAT_4
+        data_type: VARCHAR(500)
+        sample_values:
+          - Wound Management | Synthetic Dressing | Silicone Dressing | Silicone Dressing
+          - Orthopedics | Fixation Devices | Screw Plates | Metal Plates
+          - Sutures | Absorbable Sutures | Monofilament Sutures | PDS Sutures
+        description: This column represents a concatenated string of all levels of a hierarchical product categorization system, capturing the full product classification path from the highest to the lowest level, allowing for detailed analysis and filtering of healthcare claims by specific product categories.
+        synonyms:
+          - all_levels_combined_4
+          - all_categories_concatenated_4
+          - concatenated_levels_4
+          - combined_level_values_4
+          - all_level_values_concat_4
+    time_dimensions:
+      - name: DATE_KEY
+        expr: DATE_KEY
+        data_type: DATE
+        sample_values:
+          - '2024-05-21'
+          - '2024-09-07'
+          - '2024-10-16'
+        description: Date on which the healthcare claim was submitted or processed.
+        synonyms:
+          - date_column
+          - calendar_date
+          - record_date
+          - entry_date
+          - log_date
+          - timestamp
+          - calendar_key
+          - date_field
+      - name: CREATED_DATE
+        expr: CREATED_DATE
+        data_type: TIMESTAMP_NTZ(9)
+        sample_values:
+          - 2025-08-03T23:58:24.416+0000
+        description: Date and time when the healthcare claim was created.
+        synonyms:
+          - creation_date
+          - creation_timestamp
+          - date_created
+          - record_creation_date
+          - timestamp_created
+          - insertion_date
+          - insertion_timestamp
+          - entry_date
+          - entry_timestamp
+      - name: UPDATED_DATE
+        expr: UPDATED_DATE
+        data_type: TIMESTAMP_NTZ(9)
+        sample_values:
+          - 2025-08-03T23:58:24.416+0000
+        description: The date and time when the healthcare claim was last updated.
+        synonyms:
+          - last_updated
+          - modified_date
+          - revision_date
+          - last_modified
+          - update_timestamp
+      - name: NAPPI9
+        expr: NAPPI9
+        data_type: NUMBER(38,0)
+        sample_values:
+          - '345678001'
+          - '227044003'
+          - '454018003'
+        description: NAPPI9 represents the National Administrative Pharmacy Procedure Identifier (NAPPI) code for a specific medical procedure or service, which is a standardized code used to identify and report pharmacy procedures and services for billing and reimbursement purposes.
+        synonyms:
+          - nappi_code
+          - national_average_price_per_item
+          - average_item_price
+          - item_price_index
+          - national_price_indicator
+    facts:
+      - name: CLAIM_ID
+        expr: CLAIM_ID
+        data_type: NUMBER(38,0)
+        sample_values:
+          - '8525918'
+          - '8525874'
+          - '8525904'
+        description: Unique identifier for a healthcare claim submitted by a provider for reimbursement.
+        synonyms:
+          - claim_number
+          - record_id
+          - transaction_id
+          - unique_claim_identifier
+          - claim_reference_number
+          - claim_key
+      - name: YEAR
+        expr: YEAR
+        data_type: NUMBER(38,0)
+        sample_values:
+          - '2024'
+        description: The calendar year in which the healthcare claim was submitted.
+        synonyms:
+          - calendar_year
+          - fiscal_year
+          - year_value
+          - annual_period
+          - reporting_year
+          - year_number
+      - name: MONTH_NO
+        expr: MONTH_NO
+        data_type: FLOAT
+        sample_values:
+          - '10'
+          - '4'
+          - '5'
+        description: The month in which the healthcare claim was submitted, represented as a numerical value (1-12).
+        synonyms:
+          - month_number
+          - month_value
+          - monthly_period
+          - calendar_month
+          - month_identifier
+      - name: AMT_CLAIMED_TY
+        expr: AMT_CLAIMED_TY
+        data_type: FLOAT
+        sample_values:
+          - '3120'
+          - '556.8'
+          - '2934'
+        description: The total amount claimed by the patient or healthcare provider for a specific medical service or treatment, as submitted for reimbursement.
+        synonyms:
+          - claimed_amount_this_year
+          - this_year_claim_amount
+          - total_claimed_ty
+          - current_year_claim
+          - amount_claimed_this_year
+          - ty_claim_amount
+      - name: AMT_CLAIMED_LY
+        expr: AMT_CLAIMED_LY
+        data_type: FLOAT
+        sample_values:
+          - '8489.6'
+          - '64296'
+          - '2455'
+        description: The amount claimed by the healthcare provider for the services rendered to the patient, as reported on the claim.
+        synonyms:
+          - last_year_claim_amount
+          - previous_year_claim
+          - prior_year_claimed_amount
+          - ly_claimed_amount
+          - claimed_amount_last_year
+      - name: AMT_PAID_TY
+        expr: AMT_PAID_TY
+        data_type: FLOAT
+        sample_values:
+          - '2080.5'
+          - '22962'
+          - '489.25'
+        description: The total amount paid by the healthcare provider for a specific claim type within a given year.
+        synonyms:
+          - amount_paid_this_year
+          - paid_amount_current_year
+          - current_year_payment
+          - this_year_payment_amount
+          - payment_made_this_year
+      - name: AMT_PAID_LY
+        expr: AMT_PAID_LY
+        data_type: FLOAT
+        sample_values:
+          - '16718.4'
+          - '3123.6'
+          - '7273.2'
+        description: The amount paid by the healthcare provider for a claim in the last year.
+        synonyms:
+          - amount_paid_last_year
+          - last_year_payment
+          - payment_amount_ly
+          - previous_year_payment
+          - total_paid_ly
+      - name: UNITS_TY
+        expr: UNITS_TY
+        data_type: FLOAT
+        sample_values:
+          - '18'
+          - '35'
+          - '14'
+        description: The number of units of a specific treatment or service provided to a patient, as indicated on a healthcare claim.
+        synonyms:
+          - units_this_year
+          - quantity_this_year
+          - volume_this_year
+          - amount_this_year
+          - this_year_units
+      - name: UNITS_LY
+        expr: UNITS_LY
+        data_type: FLOAT
+        sample_values:
+          - '110'
+          - '72'
+          - '134'
+        description: The number of units of a specific healthcare service or product that were utilized or dispensed during the last year (LY).
+        synonyms:
+          - units_last_year
+          - last_year_units
+          - previous_year_units
+          - units_ly_value
+          - prior_year_units
+          - units_previous_year
+      - name: WF
+        expr: WF
+        data_type: NUMBER(38,0)
+        sample_values:
+          - '10'
+          - '8'
+          - '5'
+        description: 'Weight Factor: A numerical value assigned to each healthcare claim, representing the relative weight or severity of the claim, used for calculation and analysis purposes.'
+        synonyms:
+          - workforce
+          - staff
+          - personnel
+          - employees
+          - labor_force
+          - manpower
+          - human_resources
+    primary_key:
+      columns:
+        - CLAIM_ID
+  - name: HIGH_VALUE_CLAIMS_RISK
+    base_table:
+      database: QUANTIUM_HEALTHCARE_DEMO
+      schema: QUANTIUM_HEALTHCARE_DEMO
+      table: HIGH_VALUE_CLAIMS_RISK
+    dimensions:
+      - name: RISK_CATEGORY
+        expr: RISK_CATEGORY
+        data_type: VARCHAR(9)
+        sample_values:
+          - Medium
+          - High
+          - Very Low
+        description: Categorization of the risk level associated with a high-value claim, indicating the potential severity or likelihood of loss, with options including Medium, High, and Very Low.
+        synonyms:
+          - risk_type
+          - risk_level
+          - claim_category
+          - risk_classification
+          - risk_group
+          - claim_risk_type
+          - risk_description
+        cortex_search_service:
+          service: Search_Quail_HIGH_VALUE_CLAIMS_RISK_RISK_CATEGORY
+    facts:
+      - name: CLAIM_COUNT
+        expr: CLAIM_COUNT
+        data_type: NUMBER(18,0)
+        sample_values:
+          - '123693'
+          - '202986'
+          - '126415'
+        description: The total number of claims made by a policyholder or insured individual that are considered high-value, typically exceeding a predetermined threshold, and are being tracked for risk assessment and management purposes.
+        synonyms:
+          - claim_total
+          - total_claims
+          - number_of_claims
+          - claim_volume
+          - claims_counted
+      - name: TOTAL_VALUE
+        expr: TOTAL_VALUE
+        data_type: FLOAT
+        sample_values:
+          - '7372300104'
+          - '7025162491'
+          - '4388922221'
+        description: The total value of the claim, representing the maximum potential financial loss or liability associated with the risk.
+        synonyms:
+          - total_cost
+          - aggregate_value
+          - overall_amount
+          - grand_total
+          - cumulative_value
+          - total_amount
+          - total_sum
+      - name: AVG_VALUE_PER_CLAIM
+        expr: AVG_VALUE_PER_CLAIM
+        data_type: FLOAT
+        sample_values:
+          - '34609.1'
+          - '19400.44'
+          - '7409.41'
+        description: The average monetary value of each claim made, representing the typical amount paid out per claim.
+        synonyms:
+          - average_claim_value
+          - claim_average
+          - mean_claim_amount
+          - average_payout_per_claim
+          - claim_mean_value
+  - name: PATIENT_COST_CATEGORIES
+    base_table:
+      database: QUANTIUM_HEALTHCARE_DEMO
+      schema: QUANTIUM_HEALTHCARE_DEMO
+      table: PATIENT_COST_CATEGORIES
+    dimensions:
+      - name: ENTITY_NO
+        expr: ENTITY_NO
+        data_type: VARCHAR(100)
+        sample_values:
+          - PAT_00050112_132d5d8fe8da61d99a7d
+          - PAT_00070681_06719b7635f5defa6a49
+          - PAT_00035645_5f27a6643f82ecf9354d
+        description: Unique identifier for a patient.
+        synonyms:
+          - id
+          - organization_id
+          - entity_identifier
+          - institution_number
+          - facility_number
+          - provider_id
+          - health_institution_id
+      - name: PROVINCE
+        expr: PROVINCE
+        data_type: VARCHAR(50)
+        sample_values:
+          - KWAZULU-NATAL
+          - MPUMALANGA
+          - GAUTENG
+        description: The province in which the patient resides.
+        synonyms:
+          - region
+          - state
+          - territory
+          - administrative_division
+          - geographic_area
+          - area
+          - jurisdiction
+      - name: AGE_GROUPS
+        expr: AGE_GROUPS
+        data_type: VARCHAR(50)
+        sample_values:
+          - Between 65-80
+          - Greater than 80
+          - Between 50-65
+        description: 'The age range of the patient at the time of treatment or service, categorized into three groups: patients between 50-65 years old, patients between 65-80 years old, and patients greater than 80 years old.'
+        synonyms:
+          - age_ranges
+          - age_brackets
+          - demographic_groups
+          - age_categories
+          - population_groups
+          - age_segments
+      - name: COST_CATEGORY
+        expr: COST_CATEGORY
+        data_type: VARCHAR(14)
+        sample_values:
+          - Medium Cost
+          - High Cost
+          - Very Low Cost
+        description: 'Categorization of patient costs into three tiers: Medium Cost, High Cost, and Very Low Cost, indicating the level of medical expenses incurred by patients.'
+        synonyms:
+          - expense_group
+          - cost_type
+          - expenditure_category
+          - financial_classification
+          - spending_category
+          - budget_category
+        cortex_search_service:
+          service: Search_Quail_PATIENT_COST_CATEGORIES_COST_CATEGORY
+    facts:
+      - name: TOTAL_BENEFIT_PAID
+        expr: TOTAL_BENEFIT_PAID
+        data_type: FLOAT
+        sample_values:
+          - '32437.88'
+          - '20699.54'
+          - '14025.22'
+        description: The total amount paid by the healthcare provider or insurance company for the patient's medical treatment or services.
+        synonyms:
+          - total_claims_paid
+          - total_benefit_amount
+          - total_insurance_payout
+          - total_reimbursement
+          - total_compensation_paid
+      - name: PRESCRIPTION_COUNT
+        expr: PRESCRIPTION_COUNT
+        data_type: NUMBER(18,0)
+        sample_values:
+          - '16'
+          - '18'
+          - '11'
+        description: The number of prescriptions a patient has been given.
+        synonyms:
+          - total_prescriptions
+          - prescription_total
+          - prescription_quantity
+          - script_count
+          - medication_count
+          - rx_count
+  - name: PHARMACEUTICAL_CLAIMS
+    base_table:
+      database: QUANTIUM_HEALTHCARE_DEMO
+      schema: QUANTIUM_HEALTHCARE_DEMO
+      table: PHARMACEUTICAL_CLAIMS
+    dimensions:
+      - name: ENTITY_NO
+        expr: ENTITY_NO
+        data_type: VARCHAR(100)
+        sample_values:
+          - PAT_00060713_90ebed2d91f87d060c67
+          - PAT_00019246_c65b6e25c30c7582b99e
+          - PAT_00038637_3fb996ea0bdeb1ed5bc1
+        description: Unique identifier for a patent or intellectual property related to a pharmaceutical claim.
+        synonyms:
+          - entity_id
+          - organization_id
+          - company_number
+          - institution_number
+          - provider_number
+      - name: PRODUCT_NAME
+        expr: PRODUCT_NAME
+        data_type: VARCHAR(300)
+        sample_values:
+          - Glucophage
+          - Renitec
+          - Augmentin
+        description: The name of the pharmaceutical product being claimed.
+        synonyms:
+          - product_title
+          - item_name
+          - pharmaceutical_name
+          - medication_name
+          - drug_name
+          - product_description
+      - name: NAPPI_MANUFACTURER
+        expr: NAPPI_MANUFACTURER
+        data_type: VARCHAR(200)
+        sample_values:
+          - GSK
+          - Johnson & Johnson
+          - MSD
+        description: The name of the manufacturer of the pharmaceutical product, as identified by the National Pharmaceutical Product Interface (NAPPI) code.
+        synonyms:
+          - pharmaceutical_company
+          - drug_maker
+          - medicine_manufacturer
+          - pharmaceutical_supplier
+          - medication_producer
+          - nappi_supplier
+      - name: AGE_BUCKET
+        expr: AGE_BUCKET
+        data_type: VARCHAR(50)
+        sample_values:
+          - Above 18 Yrs
+          - Under 18 Yrs
+          - Above 80 Yrs
+        description: 'The age range of the patient at the time of the claim, categorized into three groups: patients under 18 years old, patients between 18 and 80 years old, and patients above 80 years old.'
+        synonyms:
+          - age_group
+          - age_range
+          - age_category
+          - age_band
+          - age_segment
+      - name: AGE_GROUPS
+        expr: AGE_GROUPS
+        data_type: VARCHAR(50)
+        sample_values:
+          - Between 35-50
+          - Under 18
+          - Between 50-65
+        description: The age range of the patient population for which the pharmaceutical claim was submitted.
+        synonyms:
+          - age_ranges
+          - age_brackets
+          - age_categories
+          - demographic_groups
+          - age_segments
+      - name: GENDER
+        expr: GENDER
+        data_type: VARCHAR(10)
+        sample_values:
+          - M
+          - F
+        description: The gender of the patient making the pharmaceutical claim, with M indicating male and F indicating female.
+        synonyms:
+          - sex
+          - male_female
+          - demographic
+          - gender_identity
+          - biological_sex
+      - name: PROVINCE
+        expr: PROVINCE
+        data_type: VARCHAR(50)
+        sample_values:
+          - WESTERN CAPE
+          - GAUTENG
+          - KWAZULU-NATAL
+        description: The province in which the pharmaceutical claim was made.
+        synonyms:
+          - state
+          - region
+          - territory
+          - administrative_division
+          - geographic_area
+          - area
+          - location
+          - jurisdiction
+      - name: REGION_OF_RESIDENCE
+        expr: REGION_OF_RESIDENCE
+        data_type: VARCHAR(100)
+        sample_values:
+          - OTHER
+          - GEORGE
+          - PRETORIA
+        description: The geographic region where the patient resides, categorized into predefined areas for analysis and reporting purposes.
+        synonyms:
+          - residence_region
+          - area_of_residence
+          - place_of_residence
+          - residential_area
+          - geographic_residence
+          - location_of_residence
+          - area_of_living
+          - residential_location
+      - name: PLAN_GRP
+        expr: PLAN_GRP
+        data_type: VARCHAR(100)
+        sample_values:
+          - Ruby
+          - MediElite
+          - Savings
+        description: The PLAN_GRP column represents the plan group or tier of the pharmaceutical claim, indicating the level of coverage or benefit provided to the patient, with possible values being Ruby, MediElite, and Savings.
+        synonyms:
+          - plan_group
+          - plan_category
+          - plan_type
+          - insurance_plan
+          - coverage_group
+          - benefit_plan
+          - plan_classification
+        cortex_search_service:
+          service: Search_Quail_PHARMACEUTICAL_CLAIMS_PLAN_GRP
+      - name: PLAN_SCHEME
+        expr: PLAN_SCHEME
+        data_type: VARCHAR(200)
+        sample_values:
+          - Bonitas Medical Fund
+          - Discovery Health Medical Scheme
+          - Medshield Medical Scheme
+        description: The name of the medical scheme or plan under which a claim was made.
+        synonyms:
+          - plan_type
+          - insurance_plan
+          - coverage_scheme
+          - benefit_plan
+          - health_plan
+          - medical_plan
+          - insurance_scheme
+          - coverage_type
+        cortex_search_service:
+          service: Search_Quail_PHARMACEUTICAL_CLAIMS_PLAN_SCHEME
+      - name: DEG_DESCR
+        expr: DEG_DESCR
+        data_type: VARCHAR(200)
+        sample_values:
+          - NEU040 - Multiple sclerosis
+          - GEN001 - General medicine
+          - CAR001 - Cardiovascular disease
+        description: Description of the disease or condition being treated by the pharmaceutical claim.
+        synonyms:
+          - disease_description
+          - disease_name
+          - medical_condition
+          - health_condition
+          - diagnosis_description
+        cortex_search_service:
+          service: Search_Quail_PHARMACEUTICAL_CLAIMS_DEG_DESCR
+      - name: TREATING_DR
+        expr: TREATING_DR
+        data_type: VARCHAR(100)
+        sample_values:
+          - Cardiologist
+          - Oncologist
+          - General Practitioner
+        description: The type of doctor that is typically responsible for treating the condition or disease that the pharmaceutical product is intended to address.
+        synonyms:
+          - attending_doctor
+          - treating_physician
+          - primary_care_doctor
+          - treating_medical_professional
+          - attending_physician_name
+        cortex_search_service:
+          service: Search_Quail_PHARMACEUTICAL_CLAIMS_TREATING_DR
+      - name: STRENGTH
+        expr: STRENGTH
+        data_type: VARCHAR(50)
+        sample_values:
+          - 0.5 - MG
+          - 40 - MG
+          - 625 - MG
+        description: The strength of the pharmaceutical product, measured in milligrams (MG).
+        synonyms:
+          - potency
+          - intensity
+          - power
+          - magnitude
+          - concentration
+          - dosage
+          - effectiveness
+      - name: DOSAGE_FORM
+        expr: DOSAGE_FORM
+        data_type: VARCHAR(20)
+        sample_values:
+          - INH
+          - CAP
+          - TAB
+        description: The form in which the pharmaceutical product is administered, such as an inhaler (INH), capsule (CAP), or tablet (TAB).
+        synonyms:
+          - dosage_type
+          - medication_form
+          - pharmaceutical_form
+          - drug_formulation
+          - formulation_type
+          - dosage_format
+      - name: ATC_DESCRIPTION
+        expr: ATC_DESCRIPTION
+        data_type: VARCHAR(200)
+        sample_values:
+          - GLATIRAMER ACETATE
+          - MORPHINE
+          - BISOPROLOL
+        description: Description of medications or active ingredients in pharmaceutical claims, categorized according to the Anatomical Therapeutic Chemical (ATC) classification system.
+        synonyms:
+          - anatomical_therapeutic_chemical_description
+          - atc_class_description
+          - therapeutic_class_description
+          - pharmaceutical_classification
+          - drug_category_description
+      - name: ATC_LEVEL_DESC_1
+        expr: ATC_LEVEL_DESC_1
+        data_type: VARCHAR(200)
+        sample_values:
+          - N - Nervous System
+          - R - Respiratory System
+          - J - Antiinfectives For Systemic Use
+        description: The ATC_LEVEL_DESC_1 column represents the first level of the Anatomical Therapeutic Chemical (ATC) classification system, which categorizes pharmaceutical products based on their therapeutic and pharmacological properties. This column describes the primary anatomical group or system of the body that the pharmaceutical product is intended to treat or affect.
+        synonyms:
+          - first_level_atc_description
+          - atc_level_one
+          - atc_first_level
+          - primary_atc_description
+          - first_level_atc_code_description
+      - name: ATC_LEVEL_DESC_2
+        expr: ATC_LEVEL_DESC_2
+        data_type: VARCHAR(200)
+        sample_values:
+          - C09 - Agents Acting On The Renin-Angiotensin System
+          - N02 - Analgesics
+          - R06 - Antihistamines For Systemic Use
+        description: This column represents the second level of the Anatomical Therapeutic Chemical (ATC) classification system, which categorizes pharmaceuticals based on their therapeutic and pharmacological properties. It describes the therapeutic subgroup of the medication, such as the specific system or organ on which the medication acts.
+        synonyms:
+          - second_level_atc_description
+          - atc_level_two_description
+          - atc_second_level_descriptor
+          - atc_subgroup_description
+          - atc_second_level_name
+      - name: ATC_LEVEL_DESC_3
+        expr: ATC_LEVEL_DESC_3
+        data_type: VARCHAR(200)
+        sample_values:
+          - N06A - Antidepressants
+          - R06A - Antihistamines For Systemic Use
+          - C09A - ACE Inhibitors, Plain
+        description: This column contains the third level of the Anatomical Therapeutic Chemical (ATC) classification system, which categorizes active ingredients of drugs according to the organ or system on which they act and their therapeutic, pharmacological and chemical properties.
+        synonyms:
+          - third_level_atc_description
+          - atc_level_3_description
+          - atc_third_level_descriptor
+          - atc_3rd_level_description
+          - third_level_anatomical_therapeutic_chemical_description
+      - name: ATC_LEVEL_DESC_4
+        expr: ATC_LEVEL_DESC_4
+        data_type: VARCHAR(200)
+        sample_values:
+          - N06AB - Selective Serotonin Reuptake Inhibitors
+          - J01FA - Macrolides
+          - C03CA - Sulfonamides, Plain
+        description: This column contains the fourth level of the Anatomical Therapeutic Chemical (ATC) classification system, which describes the pharmacological subgroup of a medication.
+        synonyms:
+          - fourth_level_atc_description
+          - atc_level_4_description
+          - atc_fourth_level_descriptor
+          - fourth_atc_descriptor
+          - atc_description_level_4
+      - name: ATC_LEVEL_DESC_5
+        expr: ATC_LEVEL_DESC_5
+        data_type: VARCHAR(200)
+        sample_values:
+          - N02AA01 - Morphine
+          - J01CR02 - Amoxicillin And Beta-Lactamase Inhibitor
+          - A10BA02 - Metformin
+        description: The ATC_LEVEL_DESC_5 column contains the fifth level of the Anatomical Therapeutic Chemical (ATC) classification system, which describes the chemical, pharmacological, or therapeutic subgroup of a pharmaceutical product, along with its corresponding description.
+        synonyms:
+          - fifth_level_atc_description
+          - atc_fifth_level_descriptor
+          - atc_level_five_description
+          - fifth_atc_level_descriptor
+          - atc_description_level_five
+      - name: PROVIDER_TYPE
+        expr: PROVIDER_TYPE
+        data_type: VARCHAR(50)
+        sample_values:
+          - Pharmacy
+          - Other
+          - Hospitals
+        description: The type of healthcare provider that submitted the claim, such as a pharmacy, hospital, or other type of healthcare facility.
+        synonyms:
+          - provider_category
+          - healthcare_provider_type
+          - medical_service_provider
+          - provider_classification
+          - healthcare_facility_type
+          - medical_institution_type
+          - provider_designation
+      - name: PROVIDER_GROUP
+        expr: PROVIDER_GROUP
+        data_type: VARCHAR(100)
+        sample_values:
+          - Netcare
+          - NHN
+          - Mediclinic
+        description: The provider group that submitted the claim, indicating the hospital network or group of healthcare providers that rendered the service.
+        synonyms:
+          - provider_category
+          - provider_classification
+          - provider_type_group
+          - healthcare_provider_group
+          - medical_provider_group
+          - provider_organization
+          - provider_affiliation
+      - name: PROVIDER
+        expr: PROVIDER
+        data_type: VARCHAR(200)
+        sample_values:
+          - Clicks Pharmacy V&A Waterfront
+          - Clicks Pharmacy Durban
+          - Southern Rx Pharmacy
+        description: The name of the pharmacy provider that submitted the claim.
+        synonyms:
+          - healthcare_provider
+          - supplier
+          - medical_service_provider
+          - healthcare_supplier
+          - medical_provider
+          - practitioner
+          - caregiver
+          - medical_supplier
+          - service_provider
+          - healthcare_giver
+        cortex_search_service:
+          service: Search_Quail_PHARMACEUTICAL_CLAIMS_PROVIDER
+      - name: PROVIDER_REGION
+        expr: PROVIDER_REGION
+        data_type: VARCHAR(100)
+        sample_values:
+          - Cape Town
+          - Pretoria
+          - Johannesburg
+        description: 'The geographic region where the healthcare provider is located, categorized into three main areas: Cape Town, Pretoria, and Johannesburg.'
+        synonyms:
+          - provider_area
+          - provider_location
+          - provider_territory
+          - service_area
+          - service_region
+          - healthcare_region
+          - provider_zone
+          - geographic_area
+        cortex_search_service:
+          service: Search_Quail_PHARMACEUTICAL_CLAIMS_PROVIDER_REGION
+      - name: PROVIDER_PROVINCE
+        expr: PROVIDER_PROVINCE
+        data_type: VARCHAR(50)
+        sample_values:
+          - Eastern Cape
+          - Western Cape
+          - Gauteng
+        description: The province in which the healthcare provider is located.
+        synonyms:
+          - provider_region_name
+          - province_of_provider
+          - provider_state
+          - provider_territory
+          - healthcare_provider_province
+        cortex_search_service:
+          service: Search_Quail_PHARMACEUTICAL_CLAIMS_PROVIDER_PROVINCE
+      - name: BUCKET
+        expr: BUCKET
+        data_type: VARCHAR(50)
+        sample_values:
+          - NA
+        description: A categorization of pharmaceutical claims into predefined groups or "buckets" for analysis and reporting purposes.
+        synonyms:
+          - category
+          - group
+          - classification
+          - container
+          - allocation
+          - segment
+          - section
+          - compartment
+        cortex_search_service:
+          service: Search_Quail_PHARMACEUTICAL_CLAIMS_BUCKET
+      - name: TR_PROCEDURE_CODE_DESCRIPTION
+        expr: TR_PROCEDURE_CODE_DESCRIPTION
+        data_type: VARCHAR(300)
+        sample_values:
+          - Medical Per Diem
+          - Intravenous infusion of pharmaceutical preparation
+          - NA
+        description: Description of the medical procedure or service provided for a pharmaceutical claim, such as a specific treatment or administration method.
+        synonyms:
+          - treatment_procedure_description
+          - procedure_code_name
+          - medical_procedure_description
+          - procedure_code_text
+          - treatment_code_description
+          - procedure_name
+          - medical_treatment_description
+          - procedure_description_text
+        cortex_search_service:
+          service: Search_Quail_PHARMACEUTICAL_CLAIMS_TR_PROCEDURE_CODE_DESCRIPTION
+      - name: NAPPI9
+        expr: NAPPI9
+        data_type: NUMBER(38,0)
+        sample_values:
+          - '708286002'
+          - '701234001'
+          - '720446002'
+        description: NAPPI9 represents the unique identifier for a specific pharmaceutical product or medication, as assigned by the National Pharmaceutical Product Interface (NAPPI) system, which is used to standardize and track pharmaceutical products in South Africa.
+        synonyms:
+          - nappi_code
+          - pharmaceutical_code
+          - medication_id
+          - prescription_id
+          - rx_number
+    time_dimensions:
+      - name: DATE_KEY
+        expr: DATE_KEY
+        data_type: DATE
+        sample_values:
+          - '2019-05-28'
+          - '2019-09-20'
+          - '2017-12-20'
+        description: Date on which the pharmaceutical claim was submitted or processed.
+        synonyms:
+          - date_column
+          - calendar_date
+          - record_date
+          - entry_date
+          - log_date
+          - transaction_date
+          - event_date
+      - name: CREATED_DATE
+        expr: CREATED_DATE
+        data_type: TIMESTAMP_NTZ(9)
+        sample_values:
+          - 2025-08-03T23:58:20.106+0000
+        description: Date and time when the pharmaceutical claim was created.
+        synonyms:
+          - creation_date
+          - creation_timestamp
+          - date_created
+          - record_creation_date
+          - timestamp_created
+          - insertion_date
+          - insertion_timestamp
+          - entry_date
+          - entry_timestamp
+      - name: UPDATED_DATE
+        expr: UPDATED_DATE
+        data_type: TIMESTAMP_NTZ(9)
+        sample_values:
+          - 2025-08-03T23:58:20.106+0000
+        description: The date and time when the pharmaceutical claim was last updated.
+        synonyms:
+          - last_updated
+          - last_modified
+          - modified_date
+          - revision_date
+          - update_timestamp
+    facts:
+      - name: CLAIM_ID
+        expr: CLAIM_ID
+        data_type: NUMBER(38,0)
+        sample_values:
+          - '10408053'
+          - '10408000'
+          - '10408025'
+        description: Unique identifier for a pharmaceutical claim, used to track and manage individual claims submitted for reimbursement.
+        synonyms:
+          - claim_number
+          - claim_reference
+          - claim_identifier
+          - record_id
+          - transaction_id
+          - entry_id
+      - name: YEAR
+        expr: YEAR
+        data_type: NUMBER(38,0)
+        sample_values:
+          - '2017'
+          - '2018'
+          - '2019'
+        description: The year in which the pharmaceutical claim was made.
+        synonyms:
+          - calendar_year
+          - fiscal_year
+          - year_of_claim
+          - claim_year
+          - reporting_year
+      - name: MONTH_KEY
+        expr: MONTH_KEY
+        data_type: NUMBER(38,0)
+        sample_values:
+          - '201705'
+          - '201812'
+          - '201807'
+        description: Unique identifier for the month in which a pharmaceutical claim was made, in the format YYYYMM.
+        synonyms:
+          - month_number
+          - month_value
+          - calendar_month
+          - month_code
+          - month_identifier
+      - name: IN_OUT_HOSPITAL_IND
+        expr: IN_OUT_HOSPITAL_IND
+        data_type: NUMBER(38,0)
+        sample_values:
+          - '1'
+          - '0'
+        description: Indicator of whether the pharmaceutical claim was incurred in an inpatient hospital setting (1) or an outpatient setting (0).
+        synonyms:
+          - inpatient_outpatient_indicator
+          - hospitalization_status
+          - in_hospital_flag
+          - patient_location_indicator
+          - treatment_location_code
+      - name: SCHEDULE
+        expr: SCHEDULE
+        data_type: NUMBER(38,0)
+        sample_values:
+          - '4'
+          - '5'
+          - '6'
+        description: |-
+          The SCHEDULE column represents the classification of a pharmaceutical product under the Controlled Substances Act, with values indicating the potential for abuse and accepted medical use, where: 
+          - Schedule 4 (C-IV) substances have a lower potential for abuse and are accepted for medical use, but may lead to limited physical dependence or psychological dependence.
+          - Schedule 5 (C-V) substances have a lower potential for abuse than Schedule 4 and are accepted for medical use, with a lower risk of dependence.
+          - Schedule 6 (C-VI) substances have a very low potential for abuse and are accepted for medical use, with a very low risk of dependence.
+        synonyms:
+          - timetable
+          - calendar
+          - agenda
+          - roster
+          - program
+          - lineup
+      - name: PACK_SIZE
+        expr: PACK_SIZE
+        data_type: NUMBER(38,0)
+        sample_values:
+          - '28'
+          - '5'
+          - '21'
+        description: The quantity of a pharmaceutical product contained in a single package or unit of sale.
+        synonyms:
+          - package_quantity
+          - quantity_per_package
+          - package_volume
+          - unit_count
+          - container_size
+      - name: AMT_PAID_ATB
+        expr: AMT_PAID_ATB
+        data_type: FLOAT
+        sample_values:
+          - '0'
+        description: The amount paid for the claim after the application of the pharmacy benefit manager's (PBM) negotiated discount, also known as the "Allowed Amount" or "Allowed Charge", which is the maximum amount that the PBM will reimburse for a specific prescription.
+        synonyms:
+          - amount_paid_atb
+          - atb_payment_amount
+          - atb_claim_payment
+          - atb_reimbursement_amount
+          - atb_payment_value
+      - name: AMT_PAID_CEB
+        expr: AMT_PAID_CEB
+        data_type: FLOAT
+        sample_values:
+          - '276.21'
+          - '136.86'
+          - '79.69'
+        description: The amount paid by the Consolidated Employee Benefits (CEB) plan for a pharmaceutical claim.
+        synonyms:
+          - amount_paid_ceb
+          - ceb_payment_amount
+          - ceb_claim_amount
+          - ceb_reimbursement
+          - ceb_payment_value
+      - name: AMT_PAID_GPN
+        expr: AMT_PAID_GPN
+        data_type: FLOAT
+        sample_values:
+          - '0'
+        description: The amount paid by the General Practitioner Network (GPN) for a pharmaceutical claim.
+        synonyms:
+          - amount_paid_gpn
+          - gpn_payment_amount
+          - gpn_reimbursement
+          - general_practitioner_payment
+          - general_practitioner_network_amount
+      - name: AMT_PAID_HCC
+        expr: AMT_PAID_HCC
+        data_type: FLOAT
+        sample_values:
+          - '774.2'
+          - '766.73'
+          - '407.44'
+        description: The amount paid for a healthcare claim.
+        synonyms:
+          - amount_paid_hcc
+          - hcc_payment_amount
+          - hcc_claim_payment
+          - hcc_reimbursement_amount
+          - hcc_settlement_amount
+      - name: AMT_PAID_HCC_ADMIN
+        expr: AMT_PAID_HCC_ADMIN
+        data_type: FLOAT
+        sample_values:
+          - '0'
+        description: The amount paid for administrative costs related to Home and Community-Based Care (HCC) services.
+        synonyms:
+          - admin_hcc_payment
+          - hcc_admin_amount
+          - administrative_hcc_cost
+          - hcc_admin_expense
+          - hcc_admin_fees
+      - name: AMT_PAID_MEM
+        expr: AMT_PAID_MEM
+        data_type: FLOAT
+        sample_values:
+          - '72.76'
+          - '44.6'
+          - '141.65'
+        description: The amount paid by the member for a specific pharmaceutical claim.
+        synonyms:
+          - member_payment_amount
+          - amount_paid_member
+          - member_contribution
+          - member_payment
+          - member_reimbursement
+      - name: AMT_PAID_MOB
+        expr: AMT_PAID_MOB
+        data_type: FLOAT
+        sample_values:
+          - '0'
+        description: The amount paid by the mobile health insurance plan for a specific claim.
+        synonyms:
+          - mobile_payment_amount
+          - mobile_claim_payment
+          - amount_paid_via_mobile
+          - mobile_payment_claimed
+          - mobile_transaction_amount
+      - name: AMT_PAID_MSA
+        expr: AMT_PAID_MSA
+        data_type: FLOAT
+        sample_values:
+          - '0'
+        description: The amount paid by Medicare Supplemental Insurance (MSA) for a pharmaceutical claim.
+        synonyms:
+          - amount_paid_msa
+          - msa_payment_amount
+          - medical_savings_account_payment
+          - msa_claim_payment
+          - medical_expense_paid_msa
+      - name: AMT_PAID_PFR
+        expr: AMT_PAID_PFR
+        data_type: FLOAT
+        sample_values:
+          - '0'
+        description: The amount paid by the pharmacy for the claim.
+        synonyms:
+          - amount_paid_pfr
+          - pfr_payment_amount
+          - payment_amount_pfr
+          - pfr_claim_payment
+          - paid_pfr_amount
+      - name: AMT_PAID_PMB
+        expr: AMT_PAID_PMB
+        data_type: FLOAT
+        sample_values:
+          - '1280.14'
+          - '745.9'
+          - '4576.08'
+        description: The amount paid by the pharmacy benefit manager (PMB) for a pharmaceutical claim.
+        synonyms:
+          - amount_paid_pmb
+          - pmb_payment_amount
+          - payment_amount_pmb
+          - pmb_claim_payment
+          - paid_amount_pmb
+      - name: AMT_PAID_PMB_CHRONIC
+        expr: AMT_PAID_PMB_CHRONIC
+        data_type: FLOAT
+        sample_values:
+          - '127.24'
+          - '94.91'
+          - '2588.16'
+        description: The amount paid by the medical benefit for chronic conditions.
+        synonyms:
+          - amount_paid_pmb_chronic
+          - pmb_chronic_payment
+          - chronic_pmb_reimbursement
+          - pmb_chronic_claim_amount
+          - chronic_benefit_payment_pmb
+      - name: AMT_PAID_PROV
+        expr: AMT_PAID_PROV
+        data_type: FLOAT
+        sample_values:
+          - '819.43'
+          - '561.2'
+          - '9408.77'
+        description: The amount paid to the provider for a pharmaceutical claim.
+        synonyms:
+          - provider_payment_amount
+          - provider_reimbursement
+          - provider_compensation
+          - provider_payment
+          - prov_amount_paid
+      - name: AMT_PAID_TP
+        expr: AMT_PAID_TP
+        data_type: FLOAT
+        sample_values:
+          - '0'
+        description: The amount paid by the third-party payer for the claim.
+        synonyms:
+          - total_payment
+          - total_amount_paid
+          - payment_total
+          - total_claim_payment
+          - total_paid_amount
+      - name: AMT_PAID
+        expr: AMT_PAID
+        data_type: FLOAT
+        sample_values:
+          - '576.03'
+          - '547.43'
+          - '65.16'
+        description: The amount paid for a pharmaceutical claim.
+        synonyms:
+          - amount_paid
+          - payment_amount
+          - paid_amount
+          - total_payment
+          - payment_value
+          - paid_value
+          - amount_settled
+          - settlement_amount
+          - paid_sum
+      - name: AMT_CLAIMED
+        expr: AMT_CLAIMED
+        data_type: FLOAT
+        sample_values:
+          - '1245.81'
+          - '179.36'
+          - '2755.62'
+        description: The amount claimed by the patient or provider for reimbursement of a pharmaceutical expense.
+        synonyms:
+          - claimed_amount
+          - amount_claimed
+          - total_claimed
+          - claimed_value
+          - submitted_amount
+      - name: QTY
+        expr: QTY
+        data_type: FLOAT
+        sample_values:
+          - '4'
+          - '2'
+          - '1'
+        description: Quantity of pharmaceutical items claimed.
+        synonyms:
+          - quantity
+          - amount
+          - volume
+          - count
+          - number
+          - units
+          - total
+          - quantity_claimed
+      - name: CLAIMS
+        expr: CLAIMS
+        data_type: NUMBER(38,0)
+        sample_values:
+          - '1'
+        description: The total number of claims submitted for a specific pharmaceutical product or service.
+        synonyms:
+          - claims_count
+          - total_claims
+          - number_of_claims
+          - claims_volume
+          - claim_count
+    primary_key:
+      columns:
+        - CLAIM_ID
+  - name: VW_CLAIMS_SUMMARY
+    base_table:
+      database: QUANTIUM_HEALTHCARE_DEMO
+      schema: QUANTIUM_HEALTHCARE_DEMO
+      table: VW_CLAIMS_SUMMARY
+    dimensions:
+      - name: P_PROVINCE
+        expr: P_PROVINCE
+        data_type: VARCHAR(50)
+        sample_values:
+          - Eastern Cape
+          - KwaZulu-Natal
+          - Western Cape
+        description: Province where the claim was filed, indicating the geographical region within South Africa where the claim originated.
+        synonyms:
+          - province
+          - region
+          - state
+          - territory
+          - geographic_area
+          - administrative_division
+          - provincial_region
+      - name: CATEGORY_DESCR
+        expr: CATEGORY_DESCR
+        data_type: VARCHAR(100)
+        sample_values:
+          - Neurologist
+          - General Practitioner
+          - Hospitals
+        description: The type of healthcare provider or facility that submitted the claim.
+        synonyms:
+          - category_description
+          - category_name
+          - claim_category
+          - description
+          - category_type
+      - name: TR_LEVEL_1
+        expr: TR_LEVEL_1
+        data_type: VARCHAR(200)
+        sample_values:
+          - Syringes
+          - Surgical Instruments
+          - Diagnostics
+        description: High-level categorization of medical products or services related to a claim, such as medical devices or equipment.
+        synonyms:
+          - tier_1
+          - level_one
+          - primary_category
+          - top_level
+          - first_level
+          - main_category
+          - category_level_1
+          - primary_tier
+    facts:
+      - name: YEAR
+        expr: YEAR
+        data_type: NUMBER(38,0)
+        sample_values:
+          - '2024'
+        description: The calendar year in which the claim was made.
+        synonyms:
+          - calendar_year
+          - fiscal_year
+          - year_number
+          - annual_period
+          - twelve_month_period
+      - name: MONTH_NO
+        expr: MONTH_NO
+        data_type: FLOAT
+        sample_values:
+          - '10'
+          - '6'
+          - '12'
+        description: The month in which the claim was made, represented as a numerical value (1-12) corresponding to the months January to December.
+        synonyms:
+          - month_number
+          - month_id
+          - month_code
+          - calendar_month
+          - month_value
+          - period_number
+      - name: CLAIM_COUNT
+        expr: CLAIM_COUNT
+        data_type: NUMBER(18,0)
+        sample_values:
+          - '433'
+          - '603'
+          - '1567'
+        description: The total number of claims submitted by a customer or associated with a specific policy, product, or other relevant category.
+        synonyms:
+          - claim_total
+          - total_claims
+          - claim_volume
+          - number_of_claims
+          - claims_counted
+      - name: TOTAL_CLAIMED_TY
+        expr: TOTAL_CLAIMED_TY
+        data_type: FLOAT
+        sample_values:
+          - '5433603.7'
+          - '1785220'
+          - '9809631.1'
+        description: Total amount claimed for the year.
+        synonyms:
+          - total_claimed_amount
+          - total_claim_value
+          - total_claimed_sum
+          - claimed_total
+          - total_amount_claimed
+          - total_claimed_cost
+      - name: TOTAL_PAID_TY
+        expr: TOTAL_PAID_TY
+        data_type: FLOAT
+        sample_values:
+          - '9825797.2'
+          - '9664115.33'
+          - '3074313.72'
+        description: Total amount paid for claims in the current year.
+        synonyms:
+          - total_amount_paid
+          - total_payment
+          - total_reimbursement
+          - total_compensation
+          - total_settlement
+          - total_disbursement
+      - name: TOTAL_UNITS_TY
+        expr: TOTAL_UNITS_TY
+        data_type: FLOAT
+        sample_values:
+          - '5172'
+          - '5060'
+          - '4807'
+        description: Total number of units sold or produced during the year.
+        synonyms:
+          - total_quantity
+          - total_items
+          - total_count
+          - total_volume
+          - total_amount
+          - total_number_of_units
+      - name: AVG_CLAIMED_TY
+        expr: AVG_CLAIMED_TY
+        data_type: FLOAT
+        sample_values:
+          - '6645.336033058'
+          - '113277.062779661'
+          - '6888.694601542'
+        description: Average amount claimed for a specific type of claim.
+        synonyms:
+          - average_claimed_amount
+          - mean_claimed_value
+          - typical_claimed_cost
+          - average_claim_value
+          - mean_ty_claimed
+      - name: AVG_PAID_TY
+        expr: AVG_PAID_TY
+        data_type: FLOAT
+        sample_values:
+          - '15678.259576412'
+          - '2022.680732323'
+          - '1941.054242424'
+        description: The average amount paid per claim for a specific time period, likely a year (TY).
+        synonyms:
+          - average_paid_amount
+          - mean_payment
+          - average_reimbursement
+          - average_settlement
+          - average_compensation
+  - name: VW_PHARMA_SUMMARY
+    base_table:
+      database: QUANTIUM_HEALTHCARE_DEMO
+      schema: QUANTIUM_HEALTHCARE_DEMO
+      table: VW_PHARMA_SUMMARY
+    dimensions:
+      - name: PROVINCE
+        expr: PROVINCE
+        data_type: VARCHAR(50)
+        sample_values:
+          - EASTERN CAPE
+          - NORTHERN CAPE
+          - KWAZULU-NATAL
+        description: Province where the pharmaceutical sales were made, categorized by the nine provinces of South Africa.
+        synonyms:
+          - region
+          - state
+          - territory
+          - area
+          - jurisdiction
+          - administrative_division
+          - geographic_area
+          - locale
+      - name: PROVIDER_TYPE
+        expr: PROVIDER_TYPE
+        data_type: VARCHAR(50)
+        sample_values:
+          - Hospitals
+          - Other
+          - Pharmacy
+        description: The type of healthcare provider that dispensed the pharmaceutical product, such as a hospital, pharmacy, or other type of provider.
+        synonyms:
+          - healthcare_provider
+          - provider_category
+          - supplier_type
+          - healthcare_service_provider
+          - medical_service_provider
+          - practitioner_type
+          - care_provider_type
+      - name: ATC_LEVEL_DESC_1
+        expr: ATC_LEVEL_DESC_1
+        data_type: VARCHAR(200)
+        sample_values:
+          - N - Nervous System
+          - L - Antineoplastic And Immunomodulating Agents
+          - C - Cardiovascular System
+        description: The ATC_LEVEL_DESC_1 column represents the first level of the Anatomical Therapeutic Chemical (ATC) classification system, which categorizes pharmaceuticals based on their therapeutic and pharmacological properties. It describes the primary organ or system of the body targeted by the medication.
+        synonyms:
+          - anatomical_therapeutic_chemical_level_1
+          - atc_level_one
+          - therapeutic_class
+          - drug_category
+          - medication_group
+          - pharmaceutical_classification
+      - name: AGE_GROUPS
+        expr: AGE_GROUPS
+        data_type: VARCHAR(50)
+        sample_values:
+          - Under 18
+          - Between 35-50
+          - Greater than 80
+        description: 'The age range of the patient population, categorized into three groups: those under the age of 18, those between the ages of 35 and 50, and those over the age of 80.'
+        synonyms:
+          - age_ranges
+          - age_brackets
+          - demographic_groups
+          - population_groups
+          - age_categories
+      - name: GENDER
+        expr: GENDER
+        data_type: VARCHAR(10)
+        sample_values:
+          - F
+          - M
+        description: The gender of the patient, either Female (F) or Male (M).
+        synonyms:
+          - sex
+          - male_female
+          - demographic
+          - gender_type
+          - sex_category
+    facts:
+      - name: YEAR
+        expr: YEAR
+        data_type: NUMBER(38,0)
+        sample_values:
+          - '2017'
+          - '2018'
+          - '2019'
+        description: The calendar year in which the pharmaceutical data was reported.
+        synonyms:
+          - calendar_year
+          - fiscal_year
+          - year_value
+          - annual_period
+          - twelve_month_period
+      - name: MONTH_KEY
+        expr: MONTH_KEY
+        data_type: NUMBER(38,0)
+        sample_values:
+          - '201808'
+          - '202001'
+          - '201807'
+        description: Unique identifier for a month, represented as a 6-digit number in the format YYYYMM, where YYYY is the year and MM is the month.
+        synonyms:
+          - month_number
+          - month_id
+          - month_code
+          - calendar_month
+          - period_key
+          - reporting_month
+          - fiscal_month
+          - month_identifier
+      - name: PRESCRIPTION_COUNT
+        expr: PRESCRIPTION_COUNT
+        data_type: NUMBER(18,0)
+        sample_values:
+          - '9'
+          - '2'
+          - '3'
+        description: The total number of prescriptions written for a specific medication or treatment.
+        synonyms:
+          - prescription_total
+          - total_prescriptions
+          - prescription_volume
+          - prescription_quantity
+          - script_count
+          - rx_count
+          - prescription_number
+      - name: TOTAL_CLAIMED
+        expr: TOTAL_CLAIMED
+        data_type: FLOAT
+        sample_values:
+          - '109577.92'
+          - '25199.51'
+          - '51869.08'
+        description: The total amount claimed for a specific pharmaceutical product or service.
+        synonyms:
+          - total_amount_claimed
+          - total_claim_value
+          - claimed_amount
+          - total_claimed_value
+          - total_claimed_amount
+          - total_claims_value
+      - name: TOTAL_PAID
+        expr: TOTAL_PAID
+        data_type: FLOAT
+        sample_values:
+          - '83589.91'
+          - '587.54'
+          - '3044.8'
+        description: The total amount paid for pharmaceuticals.
+        synonyms:
+          - total_amount_paid
+          - total_payment
+          - total_reimbursement
+          - total_compensation
+          - total_settlement
+          - total_disbursement
+      - name: TOTAL_QUANTITY
+        expr: TOTAL_QUANTITY
+        data_type: FLOAT
+        sample_values:
+          - '56'
+          - '92'
+          - '102'
+        description: The total quantity of pharmaceutical products sold or distributed.
+        synonyms:
+          - total_items
+          - total_units
+          - quantity_total
+          - total_amount
+          - total_count
+          - total_volume
+          - total_number
+      - name: AVG_CLAIMED
+        expr: AVG_CLAIMED
+        data_type: FLOAT
+        sample_values:
+          - '7426.8025'
+          - '755.047777778'
+          - '8584.410769231'
+        description: The average amount claimed by patients for pharmaceutical expenses.
+        synonyms:
+          - average_claimed
+          - mean_claimed
+          - claimed_average
+          - average_amount_claimed
+          - mean_amount_claimed
+      - name: AVG_PAID
+        expr: AVG_PAID
+        data_type: FLOAT
+        sample_values:
+          - '3401.913333333'
+          - '741.09875'
+          - '609.734848485'
+        description: The average amount paid for pharmaceuticals.
+        synonyms:
+          - average_payment
+          - mean_payment
+          - average_reimbursement
+          - average_settlement
+          - mean_amount_paid
+relationships:
+  # Healthcare Claims to Product Dimensions
+  - name: healthcare_claims_to_products
+    left_table: HEALTHCARE_CLAIMS
+    right_table: DIM_PRODUCTS
+    relationship_columns:
+      - left_column: NAPPI9
+        right_column: NAPPI9
+    join_type: left_outer
+    relationship_type: many_to_one
+
+  # Healthcare Claims to Time Dimension
+  - name: healthcare_claims_to_time
+    left_table: HEALTHCARE_CLAIMS
+    right_table: DIM_TIME
+    relationship_columns:
+      - left_column: DATE_KEY
+        right_column: DATE_KEY
+    join_type: left_outer
+    relationship_type: many_to_one
+
+  # Pharmaceutical Claims to Pharmaceuticals Dimension
+  - name: pharma_claims_to_pharmaceuticals
+    left_table: PHARMACEUTICAL_CLAIMS
+    right_table: DIM_PHARMACEUTICALS
+    relationship_columns:
+      - left_column: NAPPI9
+        right_column: NAPPI9
+    join_type: left_outer
+    relationship_type: many_to_one
+
+  # Pharmaceutical Claims to Patients Dimension
+  - name: pharma_claims_to_patients
+    left_table: PHARMACEUTICAL_CLAIMS
+    right_table: DIM_PATIENTS
+    relationship_columns:
+      - left_column: ENTITY_NO
+        right_column: ENTITY_NO
+    join_type: left_outer
+    relationship_type: many_to_one
+
+  # Pharmaceutical Claims to Time Dimension
+  - name: pharma_claims_to_time
+    left_table: PHARMACEUTICAL_CLAIMS
+    right_table: DIM_TIME
+    relationship_columns:
+      - left_column: DATE_KEY
+        right_column: DATE_KEY
+    join_type: left_outer
+    relationship_type: many_to_one
+
+  # Pharmaceuticals to ATC Hierarchy
+  - name: pharmaceuticals_to_atc
+    left_table: DIM_PHARMACEUTICALS
+    right_table: DIM_ATC_HIERARCHY
+    relationship_columns:
+      - left_column: ATC_CODE
+        right_column: ATC_CODE
+    join_type: left_outer
+    relationship_type: many_to_one
+
+verified_queries:
+  - name: total_healthcare_spending_by_province
+    question: "What is the total healthcare spending by province this year?"
+    sql: |
+      SELECT 
+        hc.P_PROVINCE as province,
+        SUM(hc.AMT_PAID_TY) as total_paid_this_year,
+        SUM(hc.AMT_CLAIMED_TY) as total_claimed_this_year,
+        COUNT(*) as claim_count
+      FROM HEALTHCARE_CLAIMS hc
+      WHERE hc.YEAR = 2024
+      GROUP BY hc.P_PROVINCE
+      ORDER BY total_paid_this_year DESC
+
+  - name: top_pharmaceutical_costs_by_atc_category
+    question: "What are the top pharmaceutical costs by therapeutic category?"
+    sql: |
+      SELECT 
+        pc.ATC_LEVEL_DESC_1 as therapeutic_category,
+        SUM(pc.AMT_PAID) as total_cost,
+        COUNT(DISTINCT pc.ENTITY_NO) as patient_count,
+        COUNT(*) as prescription_count
+      FROM PHARMACEUTICAL_CLAIMS pc
+      WHERE pc.YEAR >= 2023
+      GROUP BY pc.ATC_LEVEL_DESC_1
+      ORDER BY total_cost DESC
+      LIMIT 10
+
+  - name: provider_performance_analysis
+    question: "Which provider groups have the highest claim volumes and costs?"
+    sql: |
+      SELECT 
+        hc.PROVIDER_GROUP as provider_group,
+        COUNT(*) as total_claims,
+        SUM(hc.AMT_CLAIMED_TY) as total_claimed,
+        SUM(hc.AMT_PAID_TY) as total_paid,
+        AVG(hc.AMT_PAID_TY) as avg_claim_value
+      FROM HEALTHCARE_CLAIMS hc
+      WHERE hc.YEAR = 2024
+      GROUP BY hc.PROVIDER_GROUP
+      HAVING COUNT(*) > 100
+      ORDER BY total_claims DESC
+
+  - name: medication_usage_by_demographics
+    question: "How does medication usage vary by age group and gender?"
+    sql: |
+      SELECT 
+        pc.AGE_GROUPS as age_group,
+        pc.GENDER,
+        pc.ATC_LEVEL_DESC_1 as therapeutic_category,
+        COUNT(*) as prescription_count,
+        SUM(pc.QTY) as total_quantity,
+        AVG(pc.AMT_PAID) as avg_cost_per_prescription
+      FROM PHARMACEUTICAL_CLAIMS pc
+      JOIN DIM_PATIENTS dp ON pc.ENTITY_NO = dp.ENTITY_NO
+      WHERE pc.YEAR = 2024
+      GROUP BY pc.AGE_GROUPS, pc.GENDER, pc.ATC_LEVEL_DESC_1
+      ORDER BY prescription_count DESC
+
+  - name: high_cost_medical_procedures
+    question: "What are the most expensive medical procedures and devices?"
+    sql: |
+      SELECT 
+        hc.HIGH_LEVEL_1 as category,
+        hc.HIGH_LEVEL_2 as subcategory,
+        hc.MANUFACTURER,
+        COUNT(*) as procedure_count,
+        SUM(hc.AMT_CLAIMED_TY) as total_claimed,
+        AVG(hc.AMT_CLAIMED_TY) as avg_cost_per_procedure
+      FROM HEALTHCARE_CLAIMS hc
+      WHERE hc.AMT_CLAIMED_TY > 10000 AND hc.YEAR = 2024
+      GROUP BY hc.HIGH_LEVEL_1, hc.HIGH_LEVEL_2, hc.MANUFACTURER
+      ORDER BY avg_cost_per_procedure DESC
+      LIMIT 15
+
+custom_instructions: |
+  When analyzing healthcare data, always consider:
+  1. Patient privacy - all data is synthetic and anonymized
+  2. Clinical context - interpret medical codes and classifications appropriately  
+  3. Financial accuracy - distinguish between claimed amounts and paid amounts
+  4. Geographic relevance - focus on South African healthcare context
+  5. Temporal patterns - consider seasonal healthcare trends
+  6. Provider networks - understand relationships between different healthcare providers
+  7. Regulatory compliance - consider South African medical scheme regulations
+  8. ATC classification - use the 5-level ATC hierarchy for pharmaceutical analysis
+  9. Medical device categorization - utilize the 4-level product hierarchy for devices
+  10. Cost optimization - identify opportunities for healthcare cost savings while maintaining quality care
