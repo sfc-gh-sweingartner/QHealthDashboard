@@ -1,11 +1,1 @@
-# Streamlit in Snowflake - Empty Requirements
-# All necessary packages appear to be pre-installed based on the screenshot:
-# - altair (5.5.0)
-# - numpy (2.3.1)  
-# - pandas (2.2.3)
-# - plotly (6.0.1)
-# - scikit-learn (1.6.1)
-# - scipy (1.15.3)
-# - snowflake-snowpark-python (Latest)
-
-# No additional packages needed - using only pre-installed libraries
+# No additional packages needed - using stage packages
